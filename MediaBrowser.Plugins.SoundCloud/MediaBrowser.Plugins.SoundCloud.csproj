@@ -1,127 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B1E5B6D7-278C-4A9D-8DC1-F6F27E58F945}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MediaBrowser.Plugins.SoundCloud</RootNamespace>
-    <AssemblyName>MediaBrowser.Plugins.SoundCloud</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyVersion>10.0.0.0</AssemblyVersion>
+    <FileVersion>10.0.0.0</FileVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="MediaBrowser.Common, Version=3.2.7.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MediaBrowser.Common.3.0.697\lib\portable-net45+win8+wpa81\MediaBrowser.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MediaBrowser.Controller, Version=3.2.7.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MediaBrowser.Server.Core.3.0.697\lib\net45\MediaBrowser.Controller.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MediaBrowser.Model, Version=3.2.7.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MediaBrowser.Common.3.0.697\lib\portable-net45+win8+wpa81\MediaBrowser.Model.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
+    <None Remove="Images\thumb.png" />
+    <None Remove="Images\primary.png" />
+    <None Remove="Configuration\configPage.html" />
+    <None Remove="Images\overlay_favorites.png" />
+    <None Remove="Images\overlay_followers.png" />
+    <None Remove="Images\overlay_followings.png" />
+    <None Remove="Images\overlay_login.png" />
+    <None Remove="Images\overlay_playlists.png" />
+    <None Remove="Images\overlay_tracks.png" />
+    <None Remove="ImageProcessing\" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ClientApi\Helpers.cs" />
-    <Compile Include="ClientApi\HttpMethod.cs" />
-    <Compile Include="ClientApi\Model\Label.cs" />
-    <Compile Include="ClientApi\Model\MiniUser.cs" />
-    <Compile Include="ClientApi\Model\AccessToken.cs" />
-    <Compile Include="ClientApi\Model\Activity.cs" />
-    <Compile Include="ClientApi\Model\BaseResult.cs" />
-    <Compile Include="ClientApi\Model\CreatedWith.cs" />
-    <Compile Include="ClientApi\Model\Playlist.cs" />
-    <Compile Include="ClientApi\Model\Track.cs" />
-    <Compile Include="ClientApi\Model\PlaylistResult.cs" />
-    <Compile Include="ClientApi\Model\TrackResult.cs" />
-    <Compile Include="ClientApi\Model\UserResult.cs" />
-    <Compile Include="ClientApi\Model\ActivityResult.cs" />
-    <Compile Include="ClientApi\Model\Origin.cs" />
-    <Compile Include="ClientApi\Model\User.cs" />
-    <Compile Include="ClientApi\PagingInfo.cs" />
-    <Compile Include="ClientApi\SoundCloudApi.cs" />
-    <Compile Include="Configuration\PluginConfiguration.cs" />
-    <Compile Include="Drawing\Point.cs" />
-    <Compile Include="Drawing\PointF.cs" />
-    <Compile Include="Drawing\Rectangle.cs" />
-    <Compile Include="Drawing\RectangleF.cs" />
-    <Compile Include="Drawing\Size.cs" />
-    <Compile Include="Drawing\SizeF.cs" />
-    <Compile Include="EntryPoint.cs" />
-    <Compile Include="ExternalIds\SoundCloudIds.cs" />
-    <Compile Include="ImageLinks.cs" />
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundCloudChannel.cs" />
-    <Compile Include="ClientApi\SoundCloudClient.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Images\thumb.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Images\primary.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Configuration\configPage.html" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Images\overlay_favorites.png" />
     <EmbeddedResource Include="Images\overlay_followers.png" />
     <EmbeddedResource Include="Images\overlay_followings.png" />
     <EmbeddedResource Include="Images\overlay_login.png" />
     <EmbeddedResource Include="Images\overlay_playlists.png" />
     <EmbeddedResource Include="Images\overlay_tracks.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="ImageProcessing\" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="packages.config" />
+    <PackageReference Include="Jellyfin.Controller" Version="10.2.0.1" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)" "$(SolutionDir)\..\Emby.dev\ProgramData-Server\Plugins\" /y</PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
