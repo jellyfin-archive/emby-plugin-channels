@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MediaBrowser.Controller.Net;
 using MediaBrowser.Controller.Security;
 using MediaBrowser.Model.Querying;

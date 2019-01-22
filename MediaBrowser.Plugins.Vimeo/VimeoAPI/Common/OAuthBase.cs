@@ -1,4 +1,4 @@
-﻿#if WINDOWS
+#if WINDOWS
 using System.Web;
 using System.Diagnostics;
 #endif

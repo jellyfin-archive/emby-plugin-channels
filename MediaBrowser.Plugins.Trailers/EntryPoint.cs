@@ -1,4 +1,4 @@
-﻿using MediaBrowser.Common;
+using MediaBrowser.Common;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Plugins;
 using System;

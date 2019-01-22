@@ -1,4 +1,4 @@
-﻿using MediaBrowser.Channels.Vevo.Configuration;
+using MediaBrowser.Channels.Vevo.Configuration;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Serialization;

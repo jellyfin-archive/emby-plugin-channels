@@ -1,4 +1,4 @@
-﻿using MediaBrowser.Common.Security;
+using MediaBrowser.Common.Security;
 using System.Threading.Tasks;
 
 namespace MediaBrowser.Plugins.Trailers

@@ -1,4 +1,4 @@
-﻿namespace MediaBrowser.Channels.LeagueOfLegends.LolEventVods
+namespace MediaBrowser.Channels.LeagueOfLegends.LolEventVods
 {
     internal class RedditListing
     {

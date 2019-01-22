@@ -1,4 +1,4 @@
-﻿namespace MediaBrowser.Channels.LeagueOfLegends
+namespace MediaBrowser.Channels.LeagueOfLegends
 {
     internal enum FolderIdType
     {

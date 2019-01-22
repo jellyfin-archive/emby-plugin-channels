@@ -1,4 +1,4 @@
-﻿using MediaBrowser.Channels.Adult.Beeg.Configuration;
+using MediaBrowser.Channels.Adult.Beeg.Configuration;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Serialization;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MediaBrowser.Model.Plugins;
 
 namespace MediaBrowser.Plugins.Vimeo.Configuration

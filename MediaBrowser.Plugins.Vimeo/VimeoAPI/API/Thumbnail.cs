@@ -1,4 +1,4 @@
-﻿namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
+namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
 {
     public class Thumbnail
     {

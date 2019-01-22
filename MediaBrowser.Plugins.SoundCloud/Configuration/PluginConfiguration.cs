@@ -1,4 +1,4 @@
-﻿using MediaBrowser.Model.Plugins;
+using MediaBrowser.Model.Plugins;
 using MediaBrowser.Plugins.SoundCloud;
 using System;
 using System.Runtime.Serialization;

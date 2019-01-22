@@ -1,4 +1,4 @@
-﻿namespace MediaBrowser.Channels.LeagueOfLegends.Twitch
+namespace MediaBrowser.Channels.LeagueOfLegends.Twitch
 {
     internal class Chunk
     {

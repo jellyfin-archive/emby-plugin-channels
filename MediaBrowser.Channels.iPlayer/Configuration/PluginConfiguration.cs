@@ -1,4 +1,4 @@
-﻿using MediaBrowser.Model.Plugins;
+using MediaBrowser.Model.Plugins;
 using System;
 
 namespace MediaBrowser.Channels.iPlayer.Configuration

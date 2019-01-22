@@ -1,4 +1,4 @@
-﻿using MediaBrowser.Model.Providers;
+using MediaBrowser.Model.Providers;
 
 namespace MediaBrowser.Plugins.Trailers.Listings
 {

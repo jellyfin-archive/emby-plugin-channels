@@ -1,4 +1,4 @@
-﻿namespace MediaBrowser.Channels.SvtPlay.Entities
+namespace MediaBrowser.Channels.SvtPlay.Entities
 {
     internal class SubtitleReference
     {
