@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Security.Policy;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MediaBrowser.Common.Net;
