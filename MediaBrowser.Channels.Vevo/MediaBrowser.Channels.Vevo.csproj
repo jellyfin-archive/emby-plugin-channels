@@ -19,5 +19,6 @@
 
   <ItemGroup>
     <PackageReference Include="Jellyfin.Controller" Version="10.2.0.1" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.8.14" />
   </ItemGroup>
 </Project>
