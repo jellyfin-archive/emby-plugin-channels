@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.ServiceModel.Syndication;
 using System.Xml;
 using HtmlAgilityPack;
 using MediaBrowser.Common.Net;
@@ -27,9 +26,6 @@ namespace MediaBrowser.Channels.iPlayer
         private readonly IHttpClient _httpClient;
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
-
-
-        private String feedURL = "http://feeds.bbc.co.uk";
 
         public Channel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILoggerFactory loggerFactory)
         {
