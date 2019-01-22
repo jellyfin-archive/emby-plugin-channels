@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using ImageMagickSharp;
 using MediaBrowser.Common.Extensions;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Controller.Drawing;
@@ -20,6 +19,7 @@ using MediaBrowser.Model.Drawing;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Plugins.SoundCloud.Drawing;
 using Microsoft.Extensions.Logging;
+using SkiaSharp;
 
 namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
 {
@@ -54,7 +54,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
             this.ImageProcessor = imageProcessor;
         }
 
-        public async Task EnhanceImageAsync(IHasImages item, string inputPath, string outputPath, ImageType imageType, int imageIndex)
+        public async Task EnhanceImageAsync(BaseItem item, string inputPath, string outputPath, ImageType imageType, int imageIndex)
         {
             using (MagickWand img = await this.EnhanceImageAsyncInternal(item, new MagickWand(inputPath), imageType, imageIndex))
             {
@@ -62,7 +62,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
             }
         }
 
-        protected async Task<MagickWand> EnhanceImageAsyncInternal(IHasImages item, MagickWand originalImage, ImageType imageType, int imageIndex)
+        protected async Task<SKBitmap> EnhanceImageAsyncInternal(BaseItem item, SKBitmap originalImage, ImageType imageType, int imageIndex)
         {
             _logger.LogDebug("SoundCloudOverlayEnhancer will treat {Path}", new object[] { item.PrimaryImagePath });
 
@@ -132,12 +132,12 @@ namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
             return originalImage;
         }
 
-        public ImageSize GetEnhancedImageSize(IHasImages item, ImageType imageType, int imageIndex, ImageSize originalImageSize)
+        public ImageSize GetEnhancedImageSize(BaseItem item, ImageType imageType, int imageIndex, ImageSize originalImageSize)
         {
             return originalImageSize;
         }
 
-        public string GetConfigurationCacheKey(IHasImages item, ImageType imageType)
+        public string GetConfigurationCacheKey(BaseItem item, ImageType imageType)
         {
             Folder folder = item as Folder;
             BaseItem baseItem = item as BaseItem;
@@ -197,7 +197,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
             return null;
         }
 
-        public bool Supports(IHasImages item, ImageType imageType)
+        public bool Supports(BaseItem item, ImageType imageType)
         {
             var folderItem = item as Folder;
 
