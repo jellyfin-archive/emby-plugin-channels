@@ -1,15 +1,15 @@
-﻿using MediaBrowser.Common.Extensions;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.MediaInfo;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MediaBrowser.Common.Extensions;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.MediaInfo;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Trailers.Providers.AP
 {

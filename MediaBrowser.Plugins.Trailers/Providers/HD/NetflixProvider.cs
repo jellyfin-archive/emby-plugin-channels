@@ -1,10 +1,10 @@
-﻿using MediaBrowser.Controller.Channels;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Trailers.Providers.HD
 {

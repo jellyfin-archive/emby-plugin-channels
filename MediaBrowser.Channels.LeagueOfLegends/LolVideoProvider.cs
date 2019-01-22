@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Match = MediaBrowser.Channels.LeagueOfLegends.LolEventVods.Match;
 using MediaBrowser.Channels.LeagueOfLegends.LolEventVods;
 using MediaBrowser.Channels.LeagueOfLegends.Twitch;
 using MediaBrowser.Common;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Channels;
 using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Serialization;
-using Match = MediaBrowser.Channels.LeagueOfLegends.LolEventVods.Match;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.LeagueOfLegends
 {
@@ -58,7 +58,7 @@ namespace MediaBrowser.Channels.LeagueOfLegends
             var day = days.FirstOrDefault(d => d.DayId == dayId);
             if (day == null)
             {
-                _logger.Warn("DayId \"{0}\" couldn't be found in EventId \"{1}\"", dayId, eventId);
+                _logger.LogWarning("DayId \"{DayId}\" couldn't be found in EventId \"{EventId}\"", dayId, eventId);
                 return new ChannelItemResult();
             }
 
@@ -79,13 +79,13 @@ namespace MediaBrowser.Channels.LeagueOfLegends
             var day = days.FirstOrDefault(d => d.DayId == dayId);
             if (day == null)
             {
-                _logger.Warn("DayId \"{0}\" couldn't be found in EventId \"{1}\"", dayId, eventId);
+                _logger.LogWarning("DayId \"{DayId}\" couldn't be found in EventId \"{EventId}\"", dayId, eventId);
                 return new ChannelItemResult();
             }
             var match = day.Matches.FirstOrDefault(m => m.GameId == gameId);
             if (match == null)
             {
-                _logger.Warn("GameId \"{0}\" couldn't be found in DayId \"{0}\" and EventId \"{1}\"", gameId, dayId, eventId);
+                _logger.LogWarning("GameId \"{GameId}\" couldn't be found in DayId \"{DayId}\" and EventId \"{EventId}\"", gameId, dayId, eventId);
                 return new ChannelItemResult();
             }
 

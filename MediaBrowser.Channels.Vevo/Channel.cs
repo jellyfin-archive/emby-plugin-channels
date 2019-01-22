@@ -1,6 +1,11 @@
-﻿using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Channels;
 using MediaBrowser.Controller.Drawing;
@@ -8,13 +13,8 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Channels;
 using MediaBrowser.Model.Drawing;
 using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using MediaBrowser.Model.Serialization;
-using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.Vevo
 {
@@ -24,10 +24,10 @@ namespace MediaBrowser.Channels.Vevo
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
 
-        public Channel(IHttpClient httpClient, ILogManager logManager, IJsonSerializer jsonSerializer)
+        public Channel(IHttpClient httpClient, ILoggerFactory loggerFactory, IJsonSerializer jsonSerializer)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _jsonSerializer = jsonSerializer;
         }
 
@@ -52,7 +52,7 @@ namespace MediaBrowser.Channels.Vevo
 
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            _logger.Debug("Category ID " + query.FolderId);
+            _logger.LogDebug("Category ID {Id}", query.FolderId);
 
             if (query.FolderId == null)
             {
@@ -172,7 +172,7 @@ namespace MediaBrowser.Channels.Vevo
 
         private async Task<ChannelItemResult> GenresSubMenu(String genre, CancellationToken cancellationToken)
         {
-            _logger.Debug("Genre : " + genre);
+            _logger.LogDebug("Genre : {Genre}", genre);
             var items = new List<ChannelItemInfo>
             {
                 new ChannelItemInfo
@@ -420,10 +420,10 @@ namespace MediaBrowser.Channels.Vevo
                                 if (!url.Contains("http://h264-aka.vevo.com") && url != "")
                                 {
 
-                                    _logger.Debug("url - " + url);
-                                    _logger.Debug("width - " + width);
-                                    _logger.Debug("height - " + height);
-                                    _logger.Debug("bitrate  - " + vBit);
+                                    _logger.LogDebug("url - {Url}", url);
+                                    _logger.LogDebug("width - {Width}", width);
+                                    _logger.LogDebug("height - {Height}", height);
+                                    _logger.LogDebug("bitrate  - {VideoBitrate}", vBit);
 
                                     items.Add(new ChannelMediaInfo
                                     {

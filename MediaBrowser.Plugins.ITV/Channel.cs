@@ -1,14 +1,3 @@
-﻿using System.Runtime.CompilerServices;
-using HtmlAgilityPack;
-using MediaBrowser.Common.Net;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Controller.Drawing;
-using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Drawing;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.MediaInfo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,6 +7,17 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+using HtmlAgilityPack;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Controller.Drawing;
+using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Drawing;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.MediaInfo;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.ITV
 {
@@ -26,10 +26,10 @@ namespace MediaBrowser.Plugins.ITV
         private readonly IHttpClient _httpClient;
         private readonly ILogger _logger;
 
-        public Channel(IHttpClient httpClient, ILogManager logManager)
+        public Channel(IHttpClient httpClient, ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
         }
 
         public string DataVersion
@@ -53,7 +53,7 @@ namespace MediaBrowser.Plugins.ITV
 
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            _logger.Debug("cat ID : " + query.FolderId);
+            _logger.LogDebug("cat ID : {Id}", query.FolderId);
 
             if (query.FolderId == null)
             {
@@ -347,7 +347,7 @@ namespace MediaBrowser.Plugins.ITV
                     productionID = productionID.Replace("\"productionId\":\"", "");
                     productionID = productionID.Replace("\"", "");
 
-                    _logger.Debug("Production ID : " + productionID);
+                    _logger.LogDebug("Production ID : {Id}", productionID);
 
                     var SM_TEMPLATE =
                         String.Format(@"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:tem=""http://tempuri.org/"" xmlns:itv=""http://schemas.datacontract.org/2004/07/Itv.BB.Mercury.Common.Types"" xmlns:com=""http://schemas.itv.com/2009/05/Common"">
@@ -425,7 +425,7 @@ namespace MediaBrowser.Plugins.ITV
 
                         var videoPageNode = page.DocumentNode.SelectSingleNode("/videoentries/video/mediafiles");
                         var rtmp = videoPageNode.Attributes["base"].Value;
-                        _logger.Debug(rtmp);
+                        _logger.LogDebug(rtmp);
 
                         foreach (var node in videoPageNode.SelectNodes(".//mediafile"))
                         {
@@ -443,37 +443,12 @@ namespace MediaBrowser.Plugins.ITV
                                 Protocol = MediaProtocol.Rtmp,
                                 ReadAtNativeFramerate = true
                             });
-                            _logger.Debug(strippedURL);
+                            _logger.LogDebug(strippedURL);
                         }
                     }
-
-
-                    /*var request = new HttpRequestOptions
-                    {
-                        Url = "http://mercury.itv.com/PlaylistService.svc",
-                        Host = "mercury.itv.com",
-                        RequestContentType = "text/xml; charset=utf-8",
-                        RequestContentBytes = BitConverter.GetBytes(SM_TEMPLATE.Length),
-                        RequestContent = SM_TEMPLATE,
-                        Referer = "http://www.itv.com/mercury/Mercury_VideoPlayer.swf?v=1.6.479/[[DYNAMIC]]/2"
-                    };
-
-                    request.RequestHeaders.Add("SOAPAction", "http://tempuri.org/PlaylistService/GetPlaylist");
-
-                    using (var player = _httpClient.SendAsync(request, "POST"))
-                    {
-                        using (var reader2 = new StreamReader(site))
-                        {
-                            var html2 = await reader2.ReadToEndAsync().ConfigureAwait(false);
-
-                            _logger.Debug(html2);
-                        }
-                    }*/
-
                 }
 
                 return items.OrderByDescending(i => i.VideoBitrate ?? 0);
-
             }
         }
 

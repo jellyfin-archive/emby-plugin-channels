@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Xml.Linq;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Plugins.Vimeo.VimeoAPI.Common;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
 {
@@ -83,7 +83,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
         }
         public string GetRequestUrl(string baseUrl, string method, Dictionary<string, string> parameters, out Dictionary<string, string> oauth_parameters, string httpMethod = "GET")
         {
-            _logger.Debug("Auth Token - " + OAuthTokenKey + " = " + Token);
+            _logger.LogDebug("Auth Token - {TokenKey} = {Token}", OAuthTokenKey, Token);
 
             if (parameters == null) parameters = new Dictionary<string, string>();
             string url = baseUrl;
@@ -129,7 +129,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
             }
             catch
             {
-                _logger.Debug("Error when executing get request\nwith url: " + url);
+                _logger.LogDebug("Error when executing get request with url: {Url}", url);
                 return null;
             }
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Channels;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.iPlayer
 {
@@ -17,6 +17,7 @@ namespace MediaBrowser.Channels.iPlayer
         private readonly IHttpClient _httpClient;
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
+
         public MenuSystem(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILogger logger)
         {
             _httpClient = httpClient;
@@ -121,7 +122,7 @@ namespace MediaBrowser.Channels.iPlayer
 
                 foreach (var subCat in category.subCategories)
                 {
-                    _logger.Debug("URL : " + category.subcategory_url(subCat.id));
+                    _logger.LogDebug("URL : {Url}", category.subcategory_url(subCat.id));
                     items.Add(CreateMenu(subCat.title, "video", category.subcategory_url(subCat.id)));
                 }
             }

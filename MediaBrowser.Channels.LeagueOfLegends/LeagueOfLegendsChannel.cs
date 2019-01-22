@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,8 +13,8 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Channels;
 using MediaBrowser.Model.Drawing;
 using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.LeagueOfLegends
 {
@@ -27,9 +27,9 @@ namespace MediaBrowser.Channels.LeagueOfLegends
         private readonly TwitchService _twitchService;
         private readonly VimeoService _vimeoService;
 
-        public LeagueOfLegendsChannel(IHttpClient httpClient, IJsonSerializer jsonSerializer, IApplicationHost applicationHost, ILogManager logManager)
+        public LeagueOfLegendsChannel(IHttpClient httpClient, IJsonSerializer jsonSerializer, IApplicationHost applicationHost, ILoggerFactory loggerFactory)
         {
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _lolVideoProvider = new LolVideoProvider(httpClient, jsonSerializer, applicationHost, _logger);
             _twitchService = new TwitchService(httpClient, jsonSerializer, applicationHost);
             _vimeoService = new VimeoService(httpClient, jsonSerializer, applicationHost);
@@ -73,7 +73,7 @@ namespace MediaBrowser.Channels.LeagueOfLegends
                 case FolderIdType.Game:
                     return _lolVideoProvider.FindGames(folderId.EventId, folderId.DayId, folderId.GameId, cancellationToken);
                 default:
-                    _logger.Error("Unknown FolderIdType" + folderId.FolderIdType);
+                    _logger.LogError("Unknown FolderIdType: {IdType}", folderId.FolderIdType);
                     return Task.FromResult(new ChannelItemResult());
             }
         }
@@ -85,7 +85,7 @@ namespace MediaBrowser.Channels.LeagueOfLegends
                 case ImageType.Backdrop:
                 case ImageType.Thumb:
                     {
-                        var path = string.Format("{0}.Images.{1}.jpg", GetType().Namespace, type);
+                        var path = string.Format("{Namespace}.Images.{Type}.jpg", GetType().Namespace, type);
                         return Task.FromResult(new DynamicImageResponse
                         {
                             Format = ImageFormat.Jpg,

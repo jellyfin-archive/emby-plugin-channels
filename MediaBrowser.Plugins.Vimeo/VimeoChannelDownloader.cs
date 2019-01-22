@@ -1,23 +1,20 @@
-﻿using System.Linq;
-using MediaBrowser.Common.Net;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.Serialization;
-using MediaBrowser.Plugins.Vimeo.VimeoAPI.API;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Model.Serialization;
+using MediaBrowser.Plugins.Vimeo.VimeoAPI.API;
 
 namespace MediaBrowser.Plugins.Vimeo
 {
     class VimeoChannelDownloader
     {
-        private readonly ILogger _logger;
         private IHttpClient _httpClient;
         private IJsonSerializer _jsonSerializer;
 
-        public VimeoChannelDownloader(ILogger logManager, IJsonSerializer jsonSerializer, IHttpClient httpClient)
+        public VimeoChannelDownloader(IJsonSerializer jsonSerializer, IHttpClient httpClient)
         {
-            _logger = logManager;
             _jsonSerializer = jsonSerializer;
             _httpClient = httpClient;
         }
@@ -46,7 +43,7 @@ namespace MediaBrowser.Plugins.Vimeo
             }
 
             var pChannels = Plugin.vc.vimeo_people_getSubscriptions(false, false, false, true, false);
-            
+
             var channels = new Channels();
             channels.AddRange(from pchan in pChannels where pchan.subject_id != "778" && pchan.subject_id != "927" select Plugin.vc.vimeo_channels_getInfo(pchan.subject_id));
 

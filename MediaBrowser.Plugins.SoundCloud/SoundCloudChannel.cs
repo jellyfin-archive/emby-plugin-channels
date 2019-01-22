@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 ﻿using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Channels;
 using MediaBrowser.Controller.Drawing;
@@ -6,17 +11,12 @@ using MediaBrowser.Controller.Security;
 using MediaBrowser.Model.Channels;
 using MediaBrowser.Model.Drawing;
 using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Serialization;
 using MediaBrowser.Plugins.SoundCloud.ClientApi;
 using MediaBrowser.Plugins.SoundCloud.ClientApi.Model;
 using MediaBrowser.Plugins.SoundCloud.ExternalIds;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.SoundCloud
 {
@@ -25,9 +25,10 @@ namespace MediaBrowser.Plugins.SoundCloud
         public const string ChannelName = "SoundCloud";
 
         private readonly ILogger _logger;
-        public SoundCloudChannel(ILogManager logManager)
+
+        public SoundCloudChannel(ILoggerFactory loggerFactory)
         {
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
         }
 
         public string DataVersion
@@ -279,7 +280,7 @@ namespace MediaBrowser.Plugins.SoundCloud
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Error loading SoundCloud user data", ex);
+                    _logger.LogError(ex, "Error loading SoundCloud user data");
                 }
             }
             else
@@ -384,7 +385,7 @@ namespace MediaBrowser.Plugins.SoundCloud
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Error loading SoundCloud user data", ex);
+                _logger.LogError(ex, "Error loading SoundCloud user data");
             }
 
             return new ChannelItemResult

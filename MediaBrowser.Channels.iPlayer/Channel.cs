@@ -1,14 +1,3 @@
-﻿using System.Xml;
-using HtmlAgilityPack;
-using MediaBrowser.Common.Net;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Controller.Drawing;
-using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Drawing;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +8,17 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.ServiceModel.Syndication;
+using System.Xml;
+using HtmlAgilityPack;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Controller.Drawing;
+using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Drawing;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.iPlayer
 {
@@ -31,10 +31,10 @@ namespace MediaBrowser.Channels.iPlayer
 
         private String feedURL = "http://feeds.bbc.co.uk";
 
-        public Channel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILogManager logManager)
+        public Channel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _jsonSerializer = jsonSerializer;
         }
 
@@ -61,13 +61,13 @@ namespace MediaBrowser.Channels.iPlayer
         {
             var menu = new MenuSystem(_httpClient, _jsonSerializer, _logger);
 
-            _logger.Debug("cat ID : " + query.FolderId);
+            _logger.LogDebug("cat ID : {Id}", query.FolderId);
 
             if (query.FolderId == null)
             {
                 return await menu.GetMainMenu(cancellationToken).ConfigureAwait(false);
             }
-            
+
             var folderID = query.FolderId.Split('_');
             query.FolderId = folderID[1];
 
@@ -92,12 +92,10 @@ namespace MediaBrowser.Channels.iPlayer
             {
                 return await menu.GetAToZ(cancellationToken).ConfigureAwait(false);
             }
-            
+
 
             return null;
         }
-
-        
 
         private async Task<ChannelItemResult> GetProgramList(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
@@ -114,7 +112,6 @@ namespace MediaBrowser.Channels.iPlayer
                     //var thumb = node.SelectSingleNode(".//div[@class='min-container']//img").Attributes["src"].Value.Replace("player_image_thumb_standard", "posterframe");
                     var title = node.SelectSingleNode(".//div[@class='programme-title cell-title']/a").InnerText;
                     var url = "http://www.itv.com" + node.SelectSingleNode(".//div[@class='programme-title cell-title']/a").Attributes["href"].Value;
-                   
                     items.Add(new ChannelItemInfo
                     {
                         Name = title,
@@ -150,10 +147,7 @@ namespace MediaBrowser.Channels.iPlayer
             var items = new List<ChannelMediaInfo>();
 
             await rss.Refresh(cancellationToken);
-
-                return items.OrderByDescending(i => i.VideoBitrate ?? 0);
-
-            
+            return items.OrderByDescending(i => i.VideoBitrate ?? 0);
         }
 
         public Task<DynamicImageResponse> GetChannelImage(ImageType type, CancellationToken cancellationToken)
@@ -227,8 +221,5 @@ namespace MediaBrowser.Channels.iPlayer
         {
             get { return ChannelParentalRating.GeneralAudience; }
         }
-
-        
-
     }
 }

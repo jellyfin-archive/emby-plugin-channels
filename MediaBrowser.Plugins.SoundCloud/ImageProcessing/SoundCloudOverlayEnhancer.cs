@@ -1,4 +1,13 @@
-﻿using ImageMagickSharp;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using ImageMagickSharp;
 using MediaBrowser.Common.Extensions;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Controller.Drawing;
@@ -9,17 +18,8 @@ using MediaBrowser.Controller.Library;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Drawing;
 using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Plugins.SoundCloud.Drawing;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
 {
@@ -33,7 +33,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
             private set;
         }
 
-        protected ILogger Logger
+        protected ILogger _logger
         {
             get
             {
@@ -64,7 +64,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
 
         protected async Task<MagickWand> EnhanceImageAsyncInternal(IHasImages item, MagickWand originalImage, ImageType imageType, int imageIndex)
         {
-            Logger.Debug("SoundCloudOverlayEnhancer will treat {0}", new object[] { item.PrimaryImagePath });
+            _logger.LogDebug("SoundCloudOverlayEnhancer will treat {Path}", new object[] { item.PrimaryImagePath });
 
             Point point = new Point(0, 0);
 
@@ -121,12 +121,12 @@ namespace MediaBrowser.Plugins.SoundCloud.ImageProcessing
                 catch (Exception exception1)
                 {
                     Exception exception = exception1;
-                    this.Logger.ErrorException("Error loading overlay: {0}", exception, overlayType);
+                    _logger.LogError(exception, "Error loading overlay: {Type}", overlayType);
                 }
             }
             else
             {
-                this.Logger.Warn(string.Concat("SoundCloud - Undefined overlay type: ", overlayType), new object[0]);
+                _logger.LogWarning("SoundCloud - Undefined overlay type: {OverlayType}", overlayType);
             }
 
             return originalImage;

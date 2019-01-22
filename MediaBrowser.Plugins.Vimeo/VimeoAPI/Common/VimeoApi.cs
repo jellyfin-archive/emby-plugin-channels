@@ -1,4 +1,5 @@
-﻿#if WINDOWS
+#if WINDOWS
+// TODO why is this here? It's listed further down anyway. Can someone on windows test if it breaks to remove this?
 using System.Web;
 #endif
 using System;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
-using MediaBrowser.Model.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
 {
@@ -40,43 +41,47 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
             this.requestPermission = permission;
         }
 
-        public string ExecuteGetCommand(string url, string userName, 
-            string password, WebProxy proxy=null)
-		{
+        public string ExecuteGetCommand(
+            string url,
+            string userName,
+            string password,
+            WebProxy proxy=null)
+        {
             using (var wc = new WebClient())
-			{
+            {
                 if (proxy != null) wc.Proxy = proxy;
-                _logger.Debug("GET: " + url);
+                _logger.LogDebug("GET: {Url}", url);
 
-				if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
-					wc.Credentials = new NetworkCredential(userName, password);
-                
-				try
-				{
-					using (Stream stream = wc.OpenRead(url))
-					{
-						using (var reader = new StreamReader(stream))
-						{
+                if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+                    wc.Credentials = new NetworkCredential(userName, password);
+
+                try
+                {
+                    using (Stream stream = wc.OpenRead(url))
+                    {
+                        using (var reader = new StreamReader(stream))
+                        {
                             var r = reader.ReadToEnd();
-                            _logger.Debug("\nOK: " + url + "\n[" + r.Length + "B]: " + r.Substring(0, Math.Min(256, r.Length)));
-							return r;
-						}
-					}
-				}
-				catch (WebException ex)
-				{
-                    _logger.Debug("\nFAIL: " + url);
-                    _logger.Debug("\nMSG: " + ex.Message);
+                            _logger.LogDebug("\nOK: {Url}\n[{Length}B]: {Str}",
+                                url, r.Length, r.Substring(0, Math.Min(256, r.Length)));
+                            return r;
+                        }
+                    }
+                }
+                catch (WebException ex)
+                {
+                    _logger.LogDebug("\nFAIL: {Url}", url);
+                    _logger.LogDebug("\nMSG: {Ex}", ex.Message);
 
-					// Handle HTTP 404 errors gracefully and return a null string 
+                    // Handle HTTP 404 errors gracefully and return a null string
                     // to indicate there is no content.
-					if (ex.Response is HttpWebResponse)
-                        _logger.Debug("\nRSP: " + (ex.Response as HttpWebResponse).StatusCode);
-                       
+                    if (ex.Response is HttpWebResponse)
+                        _logger.LogDebug("\nRSP: {Msg}", (ex.Response as HttpWebResponse).StatusCode);
+
                     return null; //wtf was the other one for then? hmm
-				}
-			}
-		}
+                }
+            }
+        }
 
         public string BuildOAuthApiRequestUrl(string url)
         {
@@ -123,7 +128,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
             parameters = new Dictionary<string, string>();
             var query = uri.Query;
             var newurl = url.Split('?')[0] + '?';
-            
+
             if (query[0] == '?') query = query.Remove(0, 1);
 
             if (query.Length > 0)
@@ -139,7 +144,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
                 }
 
             uri = new Uri(newurl);
-            
+
             if (addCallBack)
                 parameters.Add("oauth_callback", "oob"); //Steven
 
@@ -168,7 +173,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
 
         public string GetAuthorizationUrl(string unauthorizedToken)
         {
-            return RequestAuthorizeUrl + unauthorizedToken + 
+            return RequestAuthorizeUrl + unauthorizedToken +
                 "&permission="+requestPermission;
         }
 
@@ -188,7 +193,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
             var vars = url.Split('?', '&');
             return (from item in vars select item.Split('=') into pair where pair[0] == parameterName select pair[1]).FirstOrDefault();
         }
-  
+
         public static string GetVimeoVideoIdFromURL(string videoURL)
         {
             if (videoURL.Contains("/"))
@@ -197,7 +202,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
 
                 return splitter[splitter.Length - 1];
             }
-            
+
             int v;
             return int.TryParse(videoURL, out v) ? videoURL : string.Empty;
         }

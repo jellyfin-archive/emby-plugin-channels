@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -18,9 +18,9 @@ using MediaBrowser.Controller.Channels;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Configuration;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Notifications;
 using MediaBrowser.Model.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.iPlayer
 {
@@ -63,7 +63,7 @@ namespace MediaBrowser.Channels.iPlayer
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Error loading feed {0}", e, url);
+                _logger.LogError(e, "Error loading feed from {Url}", url);
             }
         }
 
@@ -90,10 +90,10 @@ namespace MediaBrowser.Channels.iPlayer
 
         private async Task<IEnumerable<ChannelMediaInfo>> GetChildren(SyndicationFeed feed, CancellationToken cancellationToken) {
             var items = new List<ChannelMediaInfo>();
-            
+
             if (feed == null) return items;
 
-            _logger.Debug("Processing Feed: {0}", feed.Title);
+            _logger.LogDebug("Processing Feed: {title}", feed.Title);
 
             foreach (var item in feed.Items)
             {
@@ -110,13 +110,12 @@ namespace MediaBrowser.Channels.iPlayer
 
                     foreach (var link in item.Links)
                     {
-                        _logger.Debug("Link Title: " + link.Title);
-                        _logger.Debug("URI: " + link.Uri);
-                        _logger.Debug("RelationshipType: " + link.RelationshipType);
-                        _logger.Debug("MediaType: " + link.MediaType);
-                        _logger.Debug("Length: " + link.Length);
+                        _logger.LogDebug("Link Title: {Title}", link.Title);
+                        _logger.LogDebug("URI: {Uri}", link.Uri);
+                        _logger.LogDebug("RelationshipType: {Type}", link.RelationshipType);
+                        _logger.LogDebug("MediaType: {Type}", link.MediaType);
+                        _logger.LogDebug("Length: {Length}", link.Length);
                     }
-
                 }
                 catch(Exception ex)
                 {}
@@ -198,7 +197,7 @@ namespace MediaBrowser.Channels.iPlayer
         {
 
             //------------------------------------------------------------
-            //	Perform conversion
+            // Perform conversion
             //------------------------------------------------------------
             value = value.Trim();
             if (value.EndsWith("UT", StringComparison.OrdinalIgnoreCase))
@@ -273,20 +272,20 @@ namespace MediaBrowser.Channels.iPlayer
         public static bool TryParseRfc822DateTime(string value, out DateTime result)
         {
             //------------------------------------------------------------
-            //	Local members
+            // Local members
             //------------------------------------------------------------
             DateTimeFormatInfo dateTimeFormat = CultureInfo.InvariantCulture.DateTimeFormat;
             string[] formats = new string[3];
 
             //------------------------------------------------------------
-            //	Define valid RFC-822 formats
+            // Define valid RFC-822 formats
             //------------------------------------------------------------
             formats[0] = dateTimeFormat.RFC1123Pattern;
             formats[1] = "ddd',' d MMM yyyy HH:mm:ss zzz";
             formats[2] = "ddd',' dd MMM yyyy HH:mm:ss zzz";
 
             //------------------------------------------------------------
-            //	Validate parameter
+            // Validate parameter
             //------------------------------------------------------------
             if (String.IsNullOrEmpty(value))
             {
@@ -295,7 +294,7 @@ namespace MediaBrowser.Channels.iPlayer
             }
 
             //------------------------------------------------------------
-            //	Perform conversion of RFC-822 formatted date-time string
+            // Perform conversion of RFC-822 formatted date-time string
             //------------------------------------------------------------
             return DateTime.TryParseExact(ReplaceRfc822TimeZoneWithOffset(value), formats, dateTimeFormat,
                 DateTimeStyles.None, out result);
@@ -311,13 +310,13 @@ namespace MediaBrowser.Channels.iPlayer
         public static bool TryParseRfc3339DateTime(string value, out DateTime result)
         {
             //------------------------------------------------------------
-            //	Local members
+            // Local members
             //------------------------------------------------------------
             DateTimeFormatInfo dateTimeFormat = CultureInfo.InvariantCulture.DateTimeFormat;
             string[] formats = new string[15];
 
             //------------------------------------------------------------
-            //	Define valid RFC-3339 formats
+            // Define valid RFC-3339 formats
             //------------------------------------------------------------
             formats[0] = dateTimeFormat.SortableDateTimePattern;
             formats[1] = dateTimeFormat.UniversalSortableDateTimePattern;
@@ -336,7 +335,7 @@ namespace MediaBrowser.Channels.iPlayer
             formats[14] = "yyyy'-'MM'-'dd'T'HH:mm:ss.ffffffzzz";
 
             //------------------------------------------------------------
-            //	Validate parameter
+            // Validate parameter
             //------------------------------------------------------------
             if (String.IsNullOrEmpty(value))
             {
@@ -345,7 +344,7 @@ namespace MediaBrowser.Channels.iPlayer
             }
 
             //------------------------------------------------------------
-            //	Perform conversion of RFC-3339 formatted date-time string
+            // Perform conversion of RFC-3339 formatted date-time string
             //------------------------------------------------------------
             return DateTime.TryParseExact(value, formats, dateTimeFormat, DateTimeStyles.AssumeUniversal, out result);
         }

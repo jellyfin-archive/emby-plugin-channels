@@ -1,13 +1,3 @@
-﻿using MediaBrowser.Common.Net;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Controller.Drawing;
-using MediaBrowser.Controller.Entities;
-using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Drawing;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +5,17 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Common.Extensions;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Controller.Drawing;
+using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Drawing;
+using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Extensions;
+using MediaBrowser.Model.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Twitch
 {
@@ -25,10 +25,10 @@ namespace MediaBrowser.Plugins.Twitch
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
 
-        public TwitchChannel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILogManager logManager)
+        public TwitchChannel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _jsonSerializer = jsonSerializer;
         }
 
@@ -50,7 +50,7 @@ namespace MediaBrowser.Plugins.Twitch
         {
             ChannelItemResult result;
 
-            _logger.Debug("cat ID : " + query.FolderId);
+            _logger.LogDebug("cat ID : {Id}", query.FolderId);
 
             if (query.FolderId == null)
             {
@@ -67,7 +67,7 @@ namespace MediaBrowser.Plugins.Twitch
         private async Task<ChannelItemResult> GetChannelsInternal(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
             var offset = query.StartIndex.GetValueOrDefault();
-            var downloader = new TwitchChannelDownloader(_logger, _jsonSerializer, _httpClient);
+            var downloader = new TwitchChannelDownloader(_jsonSerializer, _httpClient);
             var channels = await downloader.GetTwitchChannelList(offset, cancellationToken);
 
             var items = channels.top.OrderByDescending(x => x.viewers)
@@ -90,7 +90,7 @@ namespace MediaBrowser.Plugins.Twitch
         private async Task<ChannelItemResult> GetChannelItemsInternal(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
             var offset = query.StartIndex.GetValueOrDefault();
-            var downloader = new TwitchListingDownloader(_logger, _jsonSerializer, _httpClient);
+            var downloader = new TwitchListingDownloader(_jsonSerializer, _httpClient);
             var videos = await downloader.GetStreamList(query.FolderId, offset, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -123,11 +123,9 @@ namespace MediaBrowser.Plugins.Twitch
             {
                 var r = _jsonSerializer.DeserializeFromStream<RootObject>(json);
 
-                //_logger.Debug("Response from twitch: " + json);
-
                 var token = r.token;
 
-                _logger.Debug("Twitch token: {0}", token);
+                _logger.LogDebug("Twitch token: {Token}", token);
 
                 var playURL = "http://usher.twitch.tv/api/channel/hls/" + id + ".m3u8?token=" + token + "&sig=" +
                                     r.sig;

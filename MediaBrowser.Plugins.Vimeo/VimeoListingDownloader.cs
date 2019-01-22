@@ -1,23 +1,20 @@
-﻿using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.Serialization;
-using MediaBrowser.Plugins.Vimeo.VimeoAPI.API;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Model.Serialization;
+using MediaBrowser.Plugins.Vimeo.VimeoAPI.API;
 
 namespace MediaBrowser.Plugins.Vimeo
 {
     public class VimeoListingDownloader
     {
-        private ILogger _logger;
         private readonly IHttpClient _httpClient;
         private readonly IJsonSerializer _jsonSerializer;
 
-        public VimeoListingDownloader(ILogger logManager, IJsonSerializer jsonSerializer, IHttpClient httpClient)
+        public VimeoListingDownloader(IJsonSerializer jsonSerializer, IHttpClient httpClient)
         {
-            _logger = logManager;
             _jsonSerializer = jsonSerializer;
             _httpClient = httpClient;
         }

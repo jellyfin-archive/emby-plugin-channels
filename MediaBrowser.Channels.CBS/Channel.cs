@@ -1,14 +1,3 @@
-﻿using HtmlAgilityPack;
-using MediaBrowser.Common.Net;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Controller.Drawing;
-using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Drawing;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.MediaInfo;
-using MediaBrowser.Model.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +5,17 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Controller.Drawing;
+using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Drawing;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.MediaInfo;
+using MediaBrowser.Model.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.CBS
 {
@@ -25,10 +25,10 @@ namespace MediaBrowser.Channels.CBS
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
 
-        public Channel(IHttpClient httpClient, ILogManager logManager, IJsonSerializer jsonSerializer)
+        public Channel(IHttpClient httpClient, ILoggerFactory loggerFactory, IJsonSerializer jsonSerializer)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _jsonSerializer = jsonSerializer;
         }
 
@@ -53,7 +53,7 @@ namespace MediaBrowser.Channels.CBS
 
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            _logger.Debug("cat ID : " + query.FolderId);
+            _logger.LogDebug("cat ID : {Id}", query.FolderId);
 
             if (query.FolderId == null)
             {
@@ -146,10 +146,10 @@ namespace MediaBrowser.Channels.CBS
                 foreach (var nodes in page.DocumentNode.SelectNodes("//div[starts-with(@id, \"id-carousel\")]"))
                 {
                     var id = nodes.Attributes["id"].Value;
-                    _logger.Debug("Past ID " + id);
+                    _logger.LogDebug("Past ID {Id}", id);
                     var idSplit = id.Split('-');
 
-                    _logger.Debug(idSplit[0] + "  " + idSplit[1] + "  " + idSplit[2]);
+                    _logger.LogDebug("{0} {1} {2}", idSplit[0], idSplit[1], idSplit[2]);
 
                     var url = String.Format("http://www.cbs.com/carousels/videosBySection/{0}/offset/0/limit/15/xs/0",
                         idSplit[2]);
@@ -180,7 +180,7 @@ namespace MediaBrowser.Channels.CBS
         {
             var page = new HtmlDocument();
             var items = new List<ChannelItemInfo>();
-            _logger.Debug("URL ! : " + query.FolderId);
+            _logger.LogDebug("URL ! : {Url}", query.FolderId);
             using (var json = await _httpClient.Get(query.FolderId, CancellationToken.None).ConfigureAwait(false))
             {
                 var videoList = _jsonSerializer.DeserializeFromStream<CategoryList>(json);
@@ -193,13 +193,14 @@ namespace MediaBrowser.Channels.CBS
                     var episode = v.episode_number;
                     var overview = v.description;
 
-                    _logger.Debug(v.airdate);
+                    // TODO this looks like a todo thing
+                    _logger.LogDebug(v.airdate);
                     //var date = DateTime.Parse(v.airdate);
                     var url = v.url;
 
                     if (v.type != "Full Episode")
                     {
-                        _logger.Debug("URL 3 ! : " + url);
+                        _logger.LogDebug("URL 3 ! : {Url}", url);
 
                         items.Add(new ChannelItemInfo
                         {
@@ -216,13 +217,13 @@ namespace MediaBrowser.Channels.CBS
                     else
                     {
                         var show = v.series_title;
-                        _logger.Debug("URL 2 ! : " + url);
+                        _logger.LogDebug("URL 2 ! : {Url}", url);
                         using (
                             var site = await _httpClient.Get("http://www.cbs.com" + url, CancellationToken.None).ConfigureAwait(false))
                         {
                             page.Load(site);
 
-                            _logger.Debug("URL 2 ! : " + url);
+                            _logger.LogDebug("URL 2 ! : {Url}", url);
                             items.Add(new ChannelItemInfo
                             {
                                 Name = show + " " + t,
@@ -260,7 +261,7 @@ namespace MediaBrowser.Channels.CBS
                     var productionNode = Regex.Match(html, "video.settings.pid = '(?<pid>[^']+)';", RegexOptions.IgnoreCase);
                     var productionID = productionNode.Groups["pid"].Value;
 
-                    _logger.Debug("Production ID : " + productionID);
+                    _logger.LogDebug("Production ID : {Id}", productionID);
 
                     using (var xmlSite = await _httpClient.Get("http://link.theplatform.com/s/dJ5BDC/" + productionID + "?format=SMIL&Tracking=true&mbr=true", CancellationToken.None).ConfigureAwait(false))
                     {
@@ -284,7 +285,7 @@ namespace MediaBrowser.Channels.CBS
                         if (rtmp_urlNode != null)
                         {
                             rtmp_url = rtmp_urlNode.Attributes["base"].Value.Replace("&amp;", "&");
-                            _logger.Debug(rtmp_url);
+                            _logger.LogDebug(rtmp_url);
                         }
 
                         foreach (var node in page.DocumentNode.SelectNodes("//switch/video"))

@@ -1,13 +1,3 @@
-﻿using HtmlAgilityPack;
-using MediaBrowser.Common.Net;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Controller.Drawing;
-using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Drawing;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.MediaInfo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +6,17 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Controller.Drawing;
+using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Drawing;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.Adult.RedTube
 {
@@ -25,10 +25,14 @@ namespace MediaBrowser.Channels.Adult.RedTube
         private readonly IHttpClient _httpClient;
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
-        public Channel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILogManager logManager)
+
+        public Channel(
+            IHttpClient httpClient,
+            IJsonSerializer jsonSerializer,
+            ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _jsonSerializer = jsonSerializer;
         }
 
@@ -48,7 +52,7 @@ namespace MediaBrowser.Channels.Adult.RedTube
 
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            _logger.Debug("cat ID : " + query.FolderId);
+            _logger.LogDebug("cat ID : {Id}", query.FolderId);
 
             if (query.FolderId == null)
             {
@@ -63,7 +67,7 @@ namespace MediaBrowser.Channels.Adult.RedTube
             }
 
             query.FolderId = catSplit[1];
-            
+
             if (catSplit[0] == "videos")
             {
                 return await GetVideos(query, cancellationToken).ConfigureAwait(false);
@@ -147,7 +151,10 @@ namespace MediaBrowser.Channels.Adult.RedTube
                 foreach (var v in videos.videos)
                 {
                     var durationNode = v.video.duration.Split(':');
-                    _logger.Debug(durationNode[0] + "." + durationNode[1]);
+
+                    // TODO make sense of this. converting m:s to double(m.s)
+                    // has a range from 0.0 - 0.59 per minute, which is wrong
+                    _logger.LogDebug("{0}.{1}", durationNode[0], durationNode[1]);
                     var time = Convert.ToDouble(durationNode[0] + "." + durationNode[1]);
 
                     items.Add(new ChannelItemInfo
@@ -162,11 +169,10 @@ namespace MediaBrowser.Channels.Adult.RedTube
                         //Tags = v.video.tags == null ? new List<string>() : v.video.tags.Select(t => t.title).ToList(),
                         DateCreated = DateTime.Parse(v.video.publish_date),
                         CommunityRating = float.Parse(v.video.rating)
-
                     });
                 }
             }
-           
+
             return new ChannelItemResult
             {
                 Items = items.ToList(),

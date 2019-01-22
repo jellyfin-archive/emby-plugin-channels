@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 using MediaBrowser.Plugins.Vimeo.Configuration;
 using MediaBrowser.Plugins.Vimeo.VimeoAPI.API;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Vimeo
 {
@@ -30,10 +30,10 @@ namespace MediaBrowser.Plugins.Vimeo
         }
         private static ILogger _logger;
 
-        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, ILogManager logManager)
+        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, ILoggerFactory loggerFactory)
             : base(applicationPaths, xmlSerializer)
         {
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
 
             Instance = this;
         }

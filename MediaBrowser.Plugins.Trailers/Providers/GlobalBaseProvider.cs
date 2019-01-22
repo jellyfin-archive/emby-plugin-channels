@@ -1,16 +1,16 @@
-﻿using MediaBrowser.Controller.Channels;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.MediaInfo;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Model.MediaInfo;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Trailers.Providers
 {
     public abstract class GlobalBaseProvider
     {
-        protected ILogger Logger;
+        protected ILogger _logger;
 
         protected readonly string[] ValidContainers = { ".mov", ".mp4", ".m4v" };
 
@@ -29,7 +29,7 @@ namespace MediaBrowser.Plugins.Trailers.Providers
 
         protected GlobalBaseProvider(ILogger logger)
         {
-            Logger = logger;
+            _logger = logger;
         }
 
         protected ChannelMediaInfo SetValues(ChannelMediaInfo info)
@@ -111,7 +111,7 @@ namespace MediaBrowser.Plugins.Trailers.Providers
 
             if (!ok)
             {
-                Logger.Debug("Ignoring {0}", url);
+                _logger.LogDebug("Ignoring {Url}", url);
             }
 
             return ok;

@@ -1,10 +1,3 @@
-﻿using HtmlAgilityPack;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Extensions;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.MediaInfo;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,6 +6,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.Extensions;
+using MediaBrowser.Model.MediaInfo;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Trailers.Providers.ML
 {
@@ -70,7 +70,7 @@ namespace MediaBrowser.Plugins.Trailers.Providers.ML
                     }
                     catch (Exception ex)
                     {
-                        Logger.ErrorException("Error getting trailer info", ex);
+                        _logger.LogError(ex, "Error getting trailer info");
                     }
                 }
             }
@@ -255,8 +255,6 @@ namespace MediaBrowser.Plugins.Trailers.Providers.ML
             {
                 if (ValidContainers.Any(i => link.EndsWith(i, StringComparison.OrdinalIgnoreCase)))
                 {
-                    //_logger.Debug("Found url: " + link);
-
                     var url = link;
 
                     if (!url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
@@ -290,8 +288,6 @@ namespace MediaBrowser.Plugins.Trailers.Providers.ML
                 }
 
                 var url = subString.Substring(0, endIndex);
-
-                //_logger.Debug("Found url: " + url);
 
                 list.Add(new ChannelMediaInfo
                 {

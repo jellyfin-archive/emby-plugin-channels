@@ -1,4 +1,10 @@
-﻿using HtmlAgilityPack;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using HtmlAgilityPack;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Channels;
 using MediaBrowser.Controller.Drawing;
@@ -6,14 +12,8 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Channels;
 using MediaBrowser.Model.Drawing;
 using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.SvtPlay
 {
@@ -24,12 +24,11 @@ namespace MediaBrowser.Channels.SvtPlay
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
 
-
         public string DataVersion
         {
             get
             {
-                // Increment as needed to invalidate all caches 
+                // Increment as needed to invalidate all caches
                 return "5";
             }
         }
@@ -44,10 +43,10 @@ namespace MediaBrowser.Channels.SvtPlay
             get { return string.Empty; }
         }
 
-        public SvtPlayChannel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILogManager logManager)
+        public SvtPlayChannel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _jsonSerializer = jsonSerializer;
         }
 
@@ -101,11 +100,11 @@ namespace MediaBrowser.Channels.SvtPlay
 
         public IEnumerable<ImageType> GetSupportedChannelImages()
         {
-            return new List<ImageType> 
-             { 
-                 ImageType.Thumb, 
+            return new List<ImageType>
+             {
+                 ImageType.Thumb,
                  ImageType.Primary,
-                 ImageType.Backdrop 
+                 ImageType.Backdrop
              };
         }
 
@@ -119,7 +118,7 @@ namespace MediaBrowser.Channels.SvtPlay
                     {
                         var path = GetType().Namespace + ".Images." + type.ToString().ToLower() + ".png";
 
-                        _logger.Log(LogSeverity.Info, "Trying to get image from path: {0}", path);
+                        _logger.LogInformation("Trying to get image from path: {Path}", path);
 
                         return Task.FromResult(new DynamicImageResponse
                         {
@@ -143,7 +142,7 @@ namespace MediaBrowser.Channels.SvtPlay
             }
             else
             {
-                _logger.Info("Received query:{0}", query.FolderId);
+                _logger.LogInformation("Received query: {Id}", query.FolderId);
                 var properties = query.FolderId.Split('_');
 
 
@@ -180,7 +179,7 @@ namespace MediaBrowser.Channels.SvtPlay
             {
                 doc.Load(stream, Encoding.UTF8);
 
-                _logger.Info("Parsing Query: {0}", query);
+                _logger.LogInformation("Parsing Query: {Query}", query);
 
                 var abroadOnly = SvtPlay.Plugin.Instance.Configuration.AvailableAbroadOnly.GetValueOrDefault();
 
@@ -209,7 +208,7 @@ namespace MediaBrowser.Channels.SvtPlay
             var doc = new HtmlDocument();
             using (var stream = await _httpClient.Get(BASE_URL + url, CancellationToken.None).ConfigureAwait(false))
             {
-                _logger.Warn("Stream lenght: {0}", stream.Length);
+                _logger.LogWarning("Stream length: {Length}", stream.Length);
                 doc.Load(stream, Encoding.UTF8);
             }
 
@@ -237,7 +236,7 @@ namespace MediaBrowser.Channels.SvtPlay
             if (catgories.Any())
                 items.Add(SvtPlaySiteParser.CreateFolderItem("Categories", "categories", url, catgories.FirstOrDefault(c => !string.IsNullOrWhiteSpace(c.ImageUrl))));
             return items;
-        }    
+        }
 
         public async Task<IEnumerable<ChannelMediaInfo>> GetChannelItemMediaInfo(string id, CancellationToken cancellationToken)
         {

@@ -1,15 +1,3 @@
-﻿using MediaBrowser.Common.Configuration;
-using MediaBrowser.Common.Net;
-using MediaBrowser.Common.Plugins;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Controller.Notifications;
-using MediaBrowser.Controller.Security;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.Notifications;
-using MediaBrowser.Model.Plugins;
-using MediaBrowser.Model.Serialization;
-using MediaBrowser.Plugins.SoundCloud.ClientApi;
-using MediaBrowser.Plugins.SoundCloud.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +5,18 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
+using MediaBrowser.Common.Configuration;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Common.Plugins;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Controller.Notifications;
+using MediaBrowser.Controller.Security;
+using MediaBrowser.Model.Notifications;
+using MediaBrowser.Model.Plugins;
+using MediaBrowser.Model.Serialization;
+using MediaBrowser.Plugins.SoundCloud.ClientApi;
+using MediaBrowser.Plugins.SoundCloud.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.SoundCloud
 {
@@ -36,12 +36,20 @@ namespace MediaBrowser.Plugins.SoundCloud
         private readonly object _saveLock = new object();
         private string _ownChannelId;
 
-        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, IEncryptionManager encryption, ILogManager logManager, INotificationManager notificationManager, IJsonSerializer jsonSerializer, IHttpClient httpClient, IChannelManager channelManager)
+        public Plugin(
+            IApplicationPaths applicationPaths,
+            IXmlSerializer xmlSerializer,
+            IEncryptionManager encryption,
+            ILoggerFactory loggerFactory,
+            INotificationManager notificationManager,
+            IJsonSerializer jsonSerializer,
+            IHttpClient httpClient,
+            IChannelManager channelManager)
             : base(applicationPaths, xmlSerializer)
         {
             Instance = this;
             _encryption = encryption;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _notificationManager = notificationManager;
             _channelManager = channelManager;
 
@@ -75,12 +83,7 @@ namespace MediaBrowser.Plugins.SoundCloud
                 {
                     var msg = "Unable to login to SoundCloud. Please check username and password.";
 
-                    //if (!string.IsNullOrWhiteSpace(ex.ResponseBody))
-                    //{
-                    //    msg = string.Format("{0} ({1})", msg, ex.ResponseBody);
-                    //}
-
-                    _logger.ErrorException(msg, ex);
+                    _logger.LogError(ex, msg);
 
                     if (createNotificationOnFailure)
                     {
@@ -142,7 +145,7 @@ namespace MediaBrowser.Plugins.SoundCloud
 
         internal ILogger Logger
         {
-            get { return this._logger; }
+            get { return _logger; }
         }
 
         internal IChannelManager ChannelManager
@@ -219,7 +222,7 @@ namespace MediaBrowser.Plugins.SoundCloud
                 }
                 else
                 {
-                    _logger.Error(string.Concat("Resource found without extension: ", manifestStreamName), new object[0]);
+                    _logger.LogError("Resource found without extension: {Name}", manifestStreamName);
                 }
                 string resourceCachePath = this.GetResourceCachePath("resources", name);
                 if (!File.Exists(resourceCachePath))
@@ -254,7 +257,7 @@ namespace MediaBrowser.Plugins.SoundCloud
             }
             else
             {
-                _logger.Error(string.Concat("Resource not found: ", name), new object[0]);
+                _logger.LogError("Resource not found: {Name}");
                 str = null;
             }
             return str;

@@ -1,7 +1,3 @@
-﻿using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.Serialization;
-using MediaBrowser.Plugins.SoundCloud.ClientApi.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,11 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Model.Serialization;
+using MediaBrowser.Plugins.SoundCloud.ClientApi.Model;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.SoundCloud.ClientApi
 {
     public class SoundCloudApi
     {
+        // TODO substitute API keys
         public const string ClientId = "78fd88dde7ebf8fdcad08106f6d56ab6";
         public const string ClientSecret = "ef6b3dbe724eff1d03298c2e787a69bd";
         public const string BaseUrl = "https://api.soundcloud.com";
@@ -29,9 +30,9 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
         private readonly IHttpClient _httpClient;
         private readonly IJsonSerializer _jsonSerializer;
 
-        public SoundCloudApi(ILogger logManager, IJsonSerializer jsonSerializer, IHttpClient httpClient)
+        public SoundCloudApi(ILogger logger, IJsonSerializer jsonSerializer, IHttpClient httpClient)
         {
-            _logger = logManager;
+            _logger = logger;
             _jsonSerializer = jsonSerializer;
             _httpClient = httpClient;
         }
@@ -256,7 +257,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Error deserializing gzipped response from uri: {0}", ex, uri);
+                _logger.LogError(ex, "Error deserializing gzipped response from uri: {Uri}", uri);
             }
 
             stream.Seek(0, SeekOrigin.Begin);

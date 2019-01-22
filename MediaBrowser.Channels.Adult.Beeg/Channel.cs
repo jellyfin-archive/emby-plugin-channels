@@ -1,13 +1,3 @@
-﻿using HtmlAgilityPack;
-using MediaBrowser.Common.Net;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Controller.Drawing;
-using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Drawing;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.MediaInfo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +6,16 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Controller.Drawing;
+using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Drawing;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.MediaInfo;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Channels.Adult.Beeg
 {
@@ -24,10 +24,10 @@ namespace MediaBrowser.Channels.Adult.Beeg
         private readonly IHttpClient _httpClient;
         private readonly ILogger _logger;
 
-        public Channel(IHttpClient httpClient, ILogManager logManager)
+        public Channel(IHttpClient httpClient, ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
         }
 
         public string DataVersion
@@ -46,7 +46,7 @@ namespace MediaBrowser.Channels.Adult.Beeg
 
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            _logger.Debug("cat ID : " + query.FolderId);
+            _logger.LogDebug("cat ID : {Id}", query.FolderId);
 
             if (query.FolderId == null)
             {
@@ -146,7 +146,7 @@ namespace MediaBrowser.Channels.Adult.Beeg
                     {
                         if (videoIDs[x] != null && videoNames[x] != null)
                         {
-                            _logger.Debug(videoIDs[x] + " - " + videoNames[x]);
+                            _logger.LogDebug("{Id} - {Name}", videoIDs[x], videoNames[x]);
                             items.Add(new ChannelItemInfo
                             {
                                 Type = ChannelItemType.Media,

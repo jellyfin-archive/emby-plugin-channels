@@ -1,5 +1,5 @@
-﻿using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
+using MediaBrowser.Model.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Trailers.Providers.AP
 {

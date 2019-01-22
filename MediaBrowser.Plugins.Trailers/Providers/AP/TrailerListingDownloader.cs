@@ -1,13 +1,15 @@
-﻿using MediaBrowser.Controller.Entities;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Plugins.Trailers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using MediaBrowser.Controller.Entities;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Plugins.Trailers.Extensions;
+using Microsoft.Extensions.Logging;
+
+// TODO: this file passes around Logger rather than storing it :( fix that
 
 namespace MediaBrowser.Plugins.Trailers.Providers.AP
 {
@@ -27,7 +29,8 @@ namespace MediaBrowser.Plugins.Trailers.Providers.AP
         /// Downloads a list of trailer info's from the apple url
         /// </summary>
         /// <returns>Task{List{TrailerInfo}}.</returns>
-        public static async Task<List<TrailerInfo>> GetTrailerList(ILogger logger, 
+        public static async Task<List<TrailerInfo>> GetTrailerList(
+            ILogger logger,
             bool hdTrailerList,
             CancellationToken cancellationToken)
         {

@@ -1,4 +1,9 @@
-﻿using MediaBrowser.Common.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MediaBrowser.Common.Extensions;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Channels;
 using MediaBrowser.Controller.Drawing;
@@ -6,14 +11,9 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Channels;
 using MediaBrowser.Model.Drawing;
 using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Serialization;
 using MediaBrowser.Plugins.Vimeo.VimeoAPI.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Vimeo
 {
@@ -23,10 +23,10 @@ namespace MediaBrowser.Plugins.Vimeo
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
 
-        public VimeoChannel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILogManager logManager)
+        public VimeoChannel(IHttpClient httpClient, IJsonSerializer jsonSerializer, ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
-            _logger = logManager.GetLogger(GetType().Name);
+            _logger = loggerFactory.CreateLogger(GetType().Name);
             _jsonSerializer = jsonSerializer;
         }
 
@@ -51,7 +51,7 @@ namespace MediaBrowser.Plugins.Vimeo
 
         public async Task<IEnumerable<ChannelItemInfo>> Search(ChannelSearchInfo searchInfo, Controller.Entities.User user, CancellationToken cancellationToken)
         {
-            var downloader = new VimeoListingDownloader(_logger, _jsonSerializer, _httpClient);
+            var downloader = new VimeoListingDownloader(_jsonSerializer, _httpClient);
             var search = await downloader.GetSearchVimeoList(searchInfo.SearchTerm, cancellationToken);
 
             return search.Select(i => new ChannelItemInfo
@@ -141,7 +141,7 @@ namespace MediaBrowser.Plugins.Vimeo
 
         private async Task<ChannelItemResult> GetCategories(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            var downloader = new VimeoCategoryDownloader(_logger, _jsonSerializer, _httpClient);
+            var downloader = new VimeoCategoryDownloader(_jsonSerializer, _httpClient);
             var channels = await downloader.GetVimeoCategoryList(query.StartIndex, query.Limit, cancellationToken);
 
             if (channels == null)
@@ -175,7 +175,7 @@ namespace MediaBrowser.Plugins.Vimeo
 
         private async Task<ChannelItemResult> GetSubCategories(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            var downloader = new VimeoCategoryDownloader(_logger, _jsonSerializer, _httpClient);
+            var downloader = new VimeoCategoryDownloader(_jsonSerializer, _httpClient);
             var channels = await downloader.GetVimeoSubCategory(query.FolderId, cancellationToken);
 
             if (channels == null)
@@ -211,7 +211,7 @@ namespace MediaBrowser.Plugins.Vimeo
         private async Task<ChannelItemResult> GetChannels(InternalChannelItemQuery query,
             CancellationToken cancellationToken)
         {
-            var downloader = new VimeoChannelDownloader(_logger, _jsonSerializer, _httpClient);
+            var downloader = new VimeoChannelDownloader(_jsonSerializer, _httpClient);
             var channels = await downloader.GetVimeoChannelList(query, cancellationToken);
 
             var items = new List<ChannelItemInfo>();
@@ -230,7 +230,7 @@ namespace MediaBrowser.Plugins.Vimeo
             }
             else
             {
-                var downloader2 = new VimeoListingDownloader(_logger, _jsonSerializer, _httpClient);
+                var downloader2 = new VimeoListingDownloader(_jsonSerializer, _httpClient);
                 videos = await downloader2.GetCategoryVideoList(query.FolderId, query.StartIndex, query.Limit, cancellationToken);
 
                 items = videos.Select(i => new ChannelItemInfo
@@ -259,7 +259,7 @@ namespace MediaBrowser.Plugins.Vimeo
         private async Task<ChannelItemResult> GetChannelItemsInternal(InternalChannelItemQuery query,
             CancellationToken cancellationToken)
         {
-            var downloader = new VimeoListingDownloader(_logger, _jsonSerializer, _httpClient);
+            var downloader = new VimeoListingDownloader(_jsonSerializer, _httpClient);
             var catSplit = query.FolderId.Split('_');
             var videos = new Videos();
 
@@ -298,7 +298,7 @@ namespace MediaBrowser.Plugins.Vimeo
 
         private async Task<ChannelItemResult> GetPersonalChannels(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            var downloader = new VimeoChannelDownloader(_logger, _jsonSerializer, _httpClient);
+            var downloader = new VimeoChannelDownloader(_jsonSerializer, _httpClient);
             var pChannels = await downloader.GetPersonalChannelList(query, cancellationToken);
 
 

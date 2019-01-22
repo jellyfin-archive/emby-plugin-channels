@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Serialization;
 
 namespace MediaBrowser.Plugins.Twitch
@@ -10,13 +9,11 @@ namespace MediaBrowser.Plugins.Twitch
     public class TwitchListingDownloader
     {
 
-        private ILogger _logger;
         private readonly IHttpClient _httpClient;
         private readonly IJsonSerializer _jsonSerializer;
 
-        public TwitchListingDownloader(ILogger logManager, IJsonSerializer jsonSerializer, IHttpClient httpClient)
+        public TwitchListingDownloader(IJsonSerializer jsonSerializer, IHttpClient httpClient)
         {
-            _logger = logManager;
             _jsonSerializer = jsonSerializer;
             _httpClient = httpClient;
         }
@@ -32,6 +29,5 @@ namespace MediaBrowser.Plugins.Twitch
 
             return reg;
         }
-       
     }
 }

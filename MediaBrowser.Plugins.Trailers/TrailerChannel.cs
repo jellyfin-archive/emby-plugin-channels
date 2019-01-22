@@ -1,15 +1,3 @@
-﻿using MediaBrowser.Common.Configuration;
-using MediaBrowser.Common.Net;
-using MediaBrowser.Controller.Channels;
-using MediaBrowser.Controller.Entities.Movies;
-using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Channels;
-using MediaBrowser.Model.Drawing;
-using MediaBrowser.Model.Entities;
-using MediaBrowser.Model.Logging;
-using MediaBrowser.Model.Net;
-using MediaBrowser.Model.Serialization;
-using MediaBrowser.Plugins.Trailers.Listings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +5,18 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using MediaBrowser.Common.Configuration;
+using MediaBrowser.Common.Net;
+using MediaBrowser.Controller.Channels;
+using MediaBrowser.Controller.Entities.Movies;
+using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Channels;
+using MediaBrowser.Model.Drawing;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.Net;
+using MediaBrowser.Model.Serialization;
+using MediaBrowser.Plugins.Trailers.Listings;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.Trailers
 {
@@ -32,7 +32,12 @@ namespace MediaBrowser.Plugins.Trailers
         const char CategorySeparator = '_';
         const string CategorySeparatorString = "_";
 
-        public TrailerChannel(IJsonSerializer json, IApplicationPaths appPaths, IHttpClient httpClient, ILogger logger, IProviderManager providerManager)
+        public TrailerChannel(
+            IJsonSerializer json,
+            IApplicationPaths appPaths,
+            IHttpClient httpClient,
+            ILogger logger,
+            IProviderManager providerManager)
         {
             _json = json;
             _appPaths = appPaths;
@@ -393,7 +398,7 @@ namespace MediaBrowser.Plugins.Trailers
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Error filling metadata for {0}", ex, item.Name);
+                    _logger.LogError(ex, "Error filling metadata for {Name}", item.Name);
                 }
             }
         }
@@ -553,7 +558,7 @@ namespace MediaBrowser.Plugins.Trailers
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Error testing media info", ex);
+                    _logger.LogError(ex, "Error testing media info");
                 }
             }
         }
