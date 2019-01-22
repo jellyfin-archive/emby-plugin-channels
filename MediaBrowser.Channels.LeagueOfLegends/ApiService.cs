@@ -14,15 +14,6 @@ namespace MediaBrowser.Channels.LeagueOfLegends
 
         protected abstract string BaseUrl { get; }
 
-        private string UserAgent
-        {
-            get
-            {
-                var version = _applicationHost.ApplicationVersion.ToString();
-                return string.Format("Media Browser/{0} +http://mediabrowser.tv/", version);
-            }
-        }
-
         protected ApiService(IHttpClient httpClient, IJsonSerializer jsonSerializer, IApplicationHost applicationHost)
         {
             _httpClient = httpClient;
