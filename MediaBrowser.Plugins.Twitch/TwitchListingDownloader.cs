@@ -22,7 +22,10 @@ namespace MediaBrowser.Plugins.Twitch
         {
             RootObject reg;
 
-            using (var json = await _httpClient.Get(string.Format("https://api.twitch.tv/kraken/streams?game={0}&offset={1}", catID, offset), CancellationToken.None).ConfigureAwait(false))
+            using (var json = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = string.Format("https://api.twitch.tv/kraken/streams?game={0}&offset={1}", catID, offset)
+            }).ConfigureAwait(false))
             {
                 reg = _jsonSerializer.DeserializeFromStream<RootObject>(json);
             }

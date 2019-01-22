@@ -95,7 +95,10 @@ namespace MediaBrowser.Channels.Vineco
         {
             var items = new List<ChannelItemInfo>();
 
-            using (var site = await _httpClient.Get("https://api.vineapp.com/channels/featured", CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "https://api.vineapp.com/channels/featured"
+            }).ConfigureAwait(false))
             {
                 var channelList = _jsonSerializer.DeserializeFromStream<ChannelList>(site);
 
@@ -121,7 +124,10 @@ namespace MediaBrowser.Channels.Vineco
         {
             var items = new List<ChannelItemInfo>();
             TimelineList timelineList;
-            using (var site = await _httpClient.Get(String.Format("https://api.vineapp.com/timelines/channels/{0}/popular?size={1}", query.FolderId, query.Limit), CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = String.Format("https://api.vineapp.com/timelines/channels/{0}/popular?size={1}", query.FolderId, query.Limit)
+            }).ConfigureAwait(false))
             {
                 timelineList = _jsonSerializer.DeserializeFromStream<TimelineList>(site);
 
@@ -191,7 +197,10 @@ namespace MediaBrowser.Channels.Vineco
         {
             var items = new List<ChannelItemInfo>();
 
-            using (var site = await _httpClient.Get("https://api.vineapp.com/timelines/popular", CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "https://api.vineapp.com/timelines/popular"
+            }).ConfigureAwait(false))
             {
                 var timelineList = _jsonSerializer.DeserializeFromStream<TimelineList>(site);
 

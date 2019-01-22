@@ -409,11 +409,12 @@ namespace MediaBrowser.Plugins.Vimeo
 
         public async Task<IEnumerable<ChannelMediaInfo>> GetChannelItemMediaInfo(string id, CancellationToken cancellationToken)
         {
-            using (var json = await _httpClient.Get(
-                "http://player.vimeo.com/video/" + id +
+            using (var json = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "http://player.vimeo.com/video/" + id +
                 // "/config?autoplay=0&byline=0&bypass_privacy=1&context=clip.main&default_to_hd=1&portrait=0&title=0",
-               "/config?type=moogaloop&referrer=&player_url=player.vimeo.com&v=1.0.0&cdn_url=http://a.vimeocdn.com",
-                CancellationToken.None).ConfigureAwait(false))
+                "/config?type=moogaloop&referrer=&player_url=player.vimeo.com&v=1.0.0&cdn_url=http://a.vimeocdn.com"
+            }).ConfigureAwait(false))
             {
                 var r = _jsonSerializer.DeserializeFromStream<RootObject>(json);
 

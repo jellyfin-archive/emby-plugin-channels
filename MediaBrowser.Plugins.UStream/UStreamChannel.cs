@@ -46,8 +46,6 @@ namespace MediaBrowser.Plugins.UStream
 
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            ChannelItemResult result;
-
             _logger.LogDebug("cat ID : {Url}", query.FolderId);
 
             if (query.FolderId == null)
@@ -79,8 +77,10 @@ namespace MediaBrowser.Plugins.UStream
             var items = new List<ChannelItemInfo>();
 
 
-            using (
-                var site = await _httpClient.Get("http://www.ustream.tv/", CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "http://www.ustream.tv/"
+            }).ConfigureAwait(false))
             {
                 page.Load(site, Encoding.UTF8);
                 if (page.DocumentNode != null)
@@ -110,7 +110,10 @@ namespace MediaBrowser.Plugins.UStream
             var page = new HtmlDocument();
             var items = new List<ChannelItemInfo>();
 
-            using (var site = await _httpClient.Get(String.Format("http://www.ustream.tv/new/explore/{0}/all", query.FolderId), CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = String.Format("http://www.ustream.tv/new/explore/{0}/all", query.FolderId)
+            }).ConfigureAwait(false))
             {
                 page.Load(site, Encoding.UTF8);
                 foreach (var node in page.DocumentNode.SelectNodes("//select[@id=\"FilterSubCategory\"]/option"))
@@ -140,7 +143,10 @@ namespace MediaBrowser.Plugins.UStream
             var page = new HtmlDocument();
             var items = new List<ChannelItemInfo>();
 
-            using (var json = await _httpClient.Get(String.Format("http://www.ustream.tv/ajax-alwayscache/new/explore/{0}/all.json?subCategory={1}&type=live&location=anywhere&page={2}", mainCategory, query.FolderId, 1), CancellationToken.None).ConfigureAwait(false))
+            using (var json = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = String.Format("http://www.ustream.tv/ajax-alwayscache/new/explore/{0}/all.json?subCategory={1}&type=live&location=anywhere&page={2}", mainCategory, query.FolderId, 1)
+            }).ConfigureAwait(false))
             {
                 var reg = _jsonSerializer.DeserializeFromStream<RootObject>(json);
 
@@ -177,7 +183,10 @@ namespace MediaBrowser.Plugins.UStream
 
             var channel = id.Split('_');
 
-            using (var site = await _httpClient.Get("http://www.ustream.tv" + channel[1], CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "http://www.ustream.tv" + channel[1]
+            }).ConfigureAwait(false))
             {
                 page.Load(site, Encoding.UTF8);
                 var node =

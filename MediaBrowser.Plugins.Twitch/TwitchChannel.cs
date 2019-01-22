@@ -119,7 +119,11 @@ namespace MediaBrowser.Plugins.Twitch
 
         public async Task<IEnumerable<ChannelMediaInfo>> GetChannelItemMediaInfo(string id, CancellationToken cancellationToken)
         {
-            using (var json = await _httpClient.Get("http://api.twitch.tv/api/channels/" + id + "/access_token", cancellationToken).ConfigureAwait(false))
+            using (var json = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "http://api.twitch.tv/api/channels/" + id + "/access_token",
+                CancellationToken = cancellationToken
+            }).ConfigureAwait(false))
             {
                 var r = _jsonSerializer.DeserializeFromStream<RootObject>(json);
 

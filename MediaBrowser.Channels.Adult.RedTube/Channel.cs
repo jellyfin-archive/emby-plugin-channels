@@ -103,7 +103,10 @@ namespace MediaBrowser.Channels.Adult.RedTube
         {
             var items = new List<ChannelItemInfo>();
 
-            using (var site = await _httpClient.Get("http://api.redtube.com/?data=redtube.Categories.getCategoriesList&output=json", CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "http://api.redtube.com/?data=redtube.Categories.getCategoriesList&output=json"
+            }).ConfigureAwait(false))
             {
                 var categories = _jsonSerializer.DeserializeFromStream<RootObject>(site);
 
@@ -142,7 +145,10 @@ namespace MediaBrowser.Channels.Adult.RedTube
                 page = 1 + (query.StartIndex.Value / query.Limit.Value) % query.Limit.Value;
             }
 
-            using (var site = await _httpClient.Get(String.Format("http://api.redtube.com/?data=redtube.Videos.searchVideos&output=json&category={0}&thumbsize=large&page={1}", query.FolderId, page), CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = String.Format("http://api.redtube.com/?data=redtube.Videos.searchVideos&output=json&category={0}&thumbsize=large&page={1}", query.FolderId, page)
+            }).ConfigureAwait(false))
             {
                 var videos = _jsonSerializer.DeserializeFromStream<RootObject>(site);
 
@@ -185,7 +191,10 @@ namespace MediaBrowser.Channels.Adult.RedTube
             var items = new List<ChannelItemInfo>();
             var page = new HtmlDocument();
 
-            using (var site = await _httpClient.Get("http://www.beeg.com/", CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "http://www.beeg.com/"
+            }).ConfigureAwait(false))
             {
                 page.Load(site, Encoding.UTF8);
                 if (page.DocumentNode != null)
@@ -215,7 +224,10 @@ namespace MediaBrowser.Channels.Adult.RedTube
 
         public async Task<IEnumerable<ChannelMediaInfo>> GetChannelItemMediaInfo(string id, CancellationToken cancellationToken)
         {
-            using (var site = await _httpClient.Get(id, CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = id
+            }).ConfigureAwait(false))
             {
                 using (var reader = new StreamReader(site))
                 {

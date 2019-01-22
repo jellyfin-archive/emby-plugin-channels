@@ -138,7 +138,10 @@ namespace MediaBrowser.Channels.Vevo
             var items = new List<ChannelItemInfo>();
             Info.Genre info;
 
-            using (var site = await _httpClient.Get("http://api.vevo.com/mobile/v1/genre/list.json", CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = "http://api.vevo.com/mobile/v1/genre/list.json"
+            }).ConfigureAwait(false))
             {
                 info = _jsonSerializer.DeserializeFromStream<Info.Genre>(site);
 
@@ -261,7 +264,10 @@ namespace MediaBrowser.Channels.Vevo
             if (request != "norequest")
                 url = url + "&order=" + request;
 
-            using (var site = await _httpClient.Get(url, CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = url
+            }).ConfigureAwait(false))
             {
                 info = _jsonSerializer.DeserializeFromStream<Info.ArtistList>(site);
 
@@ -310,7 +316,10 @@ namespace MediaBrowser.Channels.Vevo
                     request, query.Limit);
             }
 
-            using (var site = await _httpClient.Get(url, CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = url
+            }).ConfigureAwait(false))
             {
                 info = _jsonSerializer.DeserializeFromStream<Info.VideoList>(site);
 

@@ -175,7 +175,10 @@ namespace MediaBrowser.Channels.SvtPlay
         private async Task<List<ChannelItemInfo>> GetChildren(string query, string url, CancellationToken token)
         {
             var doc = new HtmlDocument();
-            using (var stream = await _httpClient.Get(BASE_URL + url, CancellationToken.None).ConfigureAwait(false))
+            using (var stream = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = BASE_URL + url
+            }).ConfigureAwait(false))
             {
                 doc.Load(stream, Encoding.UTF8);
 
@@ -206,7 +209,10 @@ namespace MediaBrowser.Channels.SvtPlay
         private async Task<List<ChannelItemInfo>> GetMenu(string url)
         {
             var doc = new HtmlDocument();
-            using (var stream = await _httpClient.Get(BASE_URL + url, CancellationToken.None).ConfigureAwait(false))
+            using (var stream = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = BASE_URL + url
+            }).ConfigureAwait(false))
             {
                 _logger.LogWarning("Stream length: {Length}", stream.Length);
                 doc.Load(stream, Encoding.UTF8);
@@ -241,7 +247,11 @@ namespace MediaBrowser.Channels.SvtPlay
         public async Task<IEnumerable<ChannelMediaInfo>> GetChannelItemMediaInfo(string id, CancellationToken cancellationToken)
         {
             var items = new List<ChannelMediaInfo>();
-            using (var streaminfo = await _httpClient.Get(string.Format("http://www.svtplay.se{0}?output=json", id.ToLower()), cancellationToken))
+            using (var streaminfo = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = string.Format("http://www.svtplay.se{0}?output=json", id.ToLower()),
+                CancellationToken = cancellationToken
+            }))
             {
                 var response = _jsonSerializer.DeserializeFromStream<SvtPlay.Entities.SvtPlayResponse>(streaminfo);
                 var mediasource = response.video.videoReferences.FirstOrDefault(r => r.playerType == "ios");

@@ -121,7 +121,10 @@ namespace MediaBrowser.Plugins.ITV
             var page = new HtmlDocument();
             var items = new List<ChannelItemInfo>();
 
-            using (var site = await _httpClient.Get(query.FolderId, CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = query.FolderId
+            }).ConfigureAwait(false))
             {
                 page.Load(site, Encoding.UTF8);
 
@@ -152,7 +155,10 @@ namespace MediaBrowser.Plugins.ITV
             var page = new HtmlDocument();
             var items = new List<ChannelItemInfo>();
 
-            using (var site = await _httpClient.Get(query.FolderId, CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = query.FolderId
+            }).ConfigureAwait(false))
             {
                 page.Load(site);
 
@@ -333,7 +339,10 @@ namespace MediaBrowser.Plugins.ITV
         {
             var page = new HtmlDocument();
             var items = new List<ChannelMediaInfo>();
-            using (var site = await _httpClient.Get(id, CancellationToken.None).ConfigureAwait(false))
+            using (var site = await _httpClient.Get(new HttpRequestOptions
+            {
+                Url = id
+            }).ConfigureAwait(false))
             {
                 using (var reader = new StreamReader(site))
                 {
