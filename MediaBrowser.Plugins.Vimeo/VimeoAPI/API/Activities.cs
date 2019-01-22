@@ -53,7 +53,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
                 type = e.Element("type").Value,
                 time = e.Element("time").Value,
                 active_user = Contact.FromElement(e.Element("active_user")),
-                
+
             };
             if (e.Element("video") != null)
             {
@@ -93,7 +93,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
                 {
                     id = e.Element("group").Attribute("id").Value,
                     name = e.Element("group").Element("name").Value,
-                    url = e.Element("group").Element("url").Value, 
+                    url = e.Element("group").Element("url").Value,
                     description = e.Element("group").Element("image").Value
                 };
             }

@@ -34,7 +34,7 @@ namespace MediaBrowser.Channels.iPlayer
         private readonly IHttpClient _httpClient;
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
-        
+
         public RSS(string url, IHttpClient httpClient, IJsonSerializer jsonSerializer, ILogger logger)
         {
             _httpClient = httpClient;
@@ -85,8 +85,8 @@ namespace MediaBrowser.Channels.iPlayer
             get {
                 if (_feed == null) return null;
                 return _feed.Description.Text;
-            } 
-        } 
+            }
+        }
 
         private async Task<IEnumerable<ChannelMediaInfo>> GetChildren(SyndicationFeed feed, CancellationToken cancellationToken) {
             var items = new List<ChannelMediaInfo>();
@@ -286,7 +286,7 @@ namespace MediaBrowser.Channels.iPlayer
             formats[2] = "ddd',' dd MMM yyyy HH:mm:ss zzz";
 
             //------------------------------------------------------------
-            //	Validate parameter  
+            //	Validate parameter
             //------------------------------------------------------------
             if (String.IsNullOrEmpty(value))
             {
@@ -336,7 +336,7 @@ namespace MediaBrowser.Channels.iPlayer
             formats[14] = "yyyy'-'MM'-'dd'T'HH:mm:ss.ffffffzzz";
 
             //------------------------------------------------------------
-            //	Validate parameter  
+            //	Validate parameter
             //------------------------------------------------------------
             if (String.IsNullOrEmpty(value))
             {
@@ -375,7 +375,7 @@ namespace MediaBrowser.Channels.iPlayer
             catch (TargetInvocationException)
             {
                 DateTime date;
-                // Microsofts parser bailed 
+                // Microsofts parser bailed
                 if (!TryParseRfc3339DateTime(dateVal, out date) && !TryParseRfc822DateTime(dateVal, out date))
                 {
                     date = DateTime.UtcNow;

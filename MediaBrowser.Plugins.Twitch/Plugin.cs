@@ -10,12 +10,12 @@ namespace MediaBrowser.Plugins.Twitch
     /// </summary>
     public class Plugin : BasePlugin<PluginConfiguration>
     {
-        
+
         public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer)
             : base(applicationPaths, xmlSerializer)
         {
             Instance = this;
-            
+
         }
 
         /// <summary>

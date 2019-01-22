@@ -75,7 +75,7 @@ namespace MediaBrowser.Channels.Adult.RedTube
         public string url { get; set; }
         public string video_id { get; set; }
         public int views { get; set; }
-        
+
     }
 
     public class RootObject

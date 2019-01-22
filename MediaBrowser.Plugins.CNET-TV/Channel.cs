@@ -267,7 +267,7 @@ namespace MediaBrowser.Plugins.CNETTV
                     }
                 }
             }
-            
+
             return new ChannelItemResult
             {
                 Items = items.ToList()

@@ -12,7 +12,7 @@ namespace MediaBrowser.Plugins.Trailers.Api
     public class GetList : IReturn<List<ChannelItemInfo>>
     {
     }
-    
+
     public class TrailerService : IService
     {
         public async Task<object> Get(GetList request)

@@ -11,7 +11,7 @@ namespace MediaBrowser.Channels.SvtPlay.Entities
         public Video video { get; set; }
 
         public Context context { get; set; }
-        
+
         public string disabled { get; set; }
     }
 

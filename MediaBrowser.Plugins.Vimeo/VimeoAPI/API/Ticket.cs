@@ -43,7 +43,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
                 };
             }
         }
-        
+
         public string ticket_id;
         public List<Chunk> Items;
 

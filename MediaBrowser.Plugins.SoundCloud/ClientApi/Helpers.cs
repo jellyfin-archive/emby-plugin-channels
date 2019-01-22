@@ -11,7 +11,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
         /// <summary>
         /// Returns a Uri with authorization segment.
         /// </summary>
-        /// 
+        ///
         /// <param name="baseUri">Input Uri.</param>
         /// <param name="token">Token.</param>
         public static Uri UriWithAuthorizedUri(this Uri baseUri, string token)
@@ -33,7 +33,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
         /// <summary>
         /// Adds query strings to a given uri.
         /// </summary>
-        /// 
+        ///
         /// <param name="baseUri">Input uri.</param>
         /// <param name="parameters">Dictionnary of^parameters to add.</param>
         public static Uri UriAppendingParameters(this Uri baseUri, Dictionary<string, object> parameters)

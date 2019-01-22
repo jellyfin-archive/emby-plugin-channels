@@ -78,7 +78,7 @@ namespace MediaBrowser.Plugins.UStream
             var page = new HtmlDocument();
             var items = new List<ChannelItemInfo>();
 
-            
+
             using (
                 var site = await _httpClient.Get("http://www.ustream.tv/", CancellationToken.None).ConfigureAwait(false))
             {
@@ -116,7 +116,7 @@ namespace MediaBrowser.Plugins.UStream
                 foreach (var node in page.DocumentNode.SelectNodes("//select[@id=\"FilterSubCategory\"]/option"))
                 {
                     HtmlAttribute link = node.Attributes["value"];
-                    
+
                     if (link.Value == "") continue;
 
                     _logger.Debug("PASSED");
@@ -143,9 +143,9 @@ namespace MediaBrowser.Plugins.UStream
             using (var json = await _httpClient.Get(String.Format("http://www.ustream.tv/ajax-alwayscache/new/explore/{0}/all.json?subCategory={1}&type=live&location=anywhere&page={2}", mainCategory, query.FolderId, 1), CancellationToken.None).ConfigureAwait(false))
             {
                 var reg = _jsonSerializer.DeserializeFromStream<RootObject>(json);
-                
+
                 page.LoadHtml(reg.pageContent);
-                
+
                 foreach (var node in page.DocumentNode.SelectNodes("//div[contains(@class, \"media-item\")]"))
                 {
                     var url = node.SelectSingleNode(".//img/parent::a").Attributes["href"].Value;
@@ -191,7 +191,7 @@ namespace MediaBrowser.Plugins.UStream
                     }
 
                 };
-               
+
             }
 
         }

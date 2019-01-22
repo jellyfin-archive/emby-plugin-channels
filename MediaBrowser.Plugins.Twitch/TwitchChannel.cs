@@ -105,7 +105,7 @@ namespace MediaBrowser.Plugins.Twitch
                 Id = i.channel.name,
                 Type = ChannelItemType.Media,
                 CommunityRating = Convert.ToSingle(i.viewers),
-                DateCreated = !String.IsNullOrEmpty(i.channel.created_at) ? 
+                DateCreated = !String.IsNullOrEmpty(i.channel.created_at) ?
                     Convert.ToDateTime(i.channel.created_at) : (DateTime?)null,
                 Overview = i.channel.status,
             });

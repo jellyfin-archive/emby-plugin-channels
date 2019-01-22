@@ -99,7 +99,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
                 return c;
             }
         }
-    
+
         public static Channel FromElement(XElement e)
         {
             return new Channel

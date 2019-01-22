@@ -538,7 +538,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
                 new Dictionary<string, string> { { "channel_id", channel_id } });
         }
         #endregion
-        
+
         #region vimeo.contacts
         public enum ContactsSortMethods
         {   Newest, Oldest, Alphabetical, MostCredited, Default }
@@ -700,7 +700,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
         //.getVideoComments
         public Comments vimeo_groups_getVideoComments(string group_id, string video_id, int? page=null, int? per_page=null)
         {
-            var parameters = new Dictionary<string, string> { 
+            var parameters = new Dictionary<string, string> {
             { "group_id", group_id }, {"video_id", video_id} };
             if (page.HasValue) parameters.Add("page", page.Value.ToString());
             if (per_page.HasValue) parameters.Add("per_page", per_page.Value.ToString());
@@ -772,7 +772,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
         public Topics vimeo_groups_forums_getTopics(string group_id, int? page=null, int? per_page=null)
         {
             var parameters = new Dictionary<string, string> { { "group_id", group_id } };
-            
+
             if (page.HasValue) parameters.Add("page", page.Value.ToString());
             if (per_page.HasValue) parameters.Add("per_page", per_page.Value.ToString());
 
@@ -825,7 +825,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
         //.addSubscription
         public bool vimeo_people_addSubscription(string user_id, bool likes, bool appears, bool uploads)
         {
-            var types = 
+            var types =
                 (likes ? "likes" + delimiter : "") +
                 (appears ? "appears" + delimiter : "") +
                 (uploads ? "uploads" : "");
@@ -1083,7 +1083,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
         //.getInfo
         public Video vimeo_videos_getInfo(string video_id)
         {
-            var x = ExecuteGetRequest("vimeo.videos.getInfo", 
+            var x = ExecuteGetRequest("vimeo.videos.getInfo",
                 new Dictionary<string,string>{{"video_id",video_id}});
             return !IsResponseOK(x) ? null : global::MediaBrowser.Plugins.Vimeo.VimeoAPI.API.Video.FromElement(x.Element("rsp").Element("video"), true);
         }
@@ -1191,9 +1191,9 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
                 sortMethod == VideosSortMethod.Oldest ? "oldest" :
                 sortMethod == VideosSortMethod.MostPlayed ? "most_played" :
                 sortMethod == VideosSortMethod.MostCommented ? "most_commented" :
-                sortMethod == VideosSortMethod.MostLiked ? "most_liked" : 
+                sortMethod == VideosSortMethod.MostLiked ? "most_liked" :
                 sortMethod == VideosSortMethod.SearchRelevant ? "relevant" : "");
-            
+
             var x = ExecuteGetRequest("vimeo.videos.search", parameters);
             return !IsResponseOK(x) ? null : Videos.FromElement(x.Element("rsp").Element("videos"), full_response);
         }
@@ -1304,7 +1304,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.API
         public bool vimeo_videos_comments_editComment(string video_id, string comment_id, string comment_text)
         {
             return IsResponseOK("vimeo.videos.comments.editComment",
-                new Dictionary<string, string> { 
+                new Dictionary<string, string> {
                 { "video_id", video_id }, { "comment_id", comment_id },
                 {"comment_text", comment_text}});
         }

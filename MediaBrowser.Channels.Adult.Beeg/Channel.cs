@@ -46,7 +46,6 @@ namespace MediaBrowser.Channels.Adult.Beeg
 
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            
             _logger.Debug("cat ID : " + query.FolderId);
 
             if (query.FolderId == null)
@@ -97,7 +96,7 @@ namespace MediaBrowser.Channels.Adult.Beeg
         }
 
         private async Task<ChannelItemResult> GetTags(CancellationToken cancellationToken)
-        {   
+        {
             var items = new List<ChannelItemInfo>();
             var page = new HtmlDocument();
 
@@ -159,10 +158,10 @@ namespace MediaBrowser.Channels.Adult.Beeg
                             });
                         }
                     }
-                   
+
                 }
             }
-           
+
             return new ChannelItemResult
             {
                 Items = items.ToList()

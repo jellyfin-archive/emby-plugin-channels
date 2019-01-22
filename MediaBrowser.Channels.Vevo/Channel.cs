@@ -87,7 +87,7 @@ namespace MediaBrowser.Channels.Vevo
 
             if (channel[0] == "artist" || channel[0] == "video")
             {
-                var i = 
+                var i =
                     await
                         GetVideoListing((channel[0] == "artist" ? "artist" : "video"), channel[1], channel[2], query,
                             cancellationToken).ConfigureAwait(false);
@@ -163,7 +163,7 @@ namespace MediaBrowser.Channels.Vevo
                     });
                 }
             }
-            
+
             return new ChannelItemResult
             {
                 Items = items.ToList()
@@ -281,7 +281,7 @@ namespace MediaBrowser.Channels.Vevo
             return new ChannelItemResult
             {
                 Items = items.ToList(),
-                TotalRecordCount = info.result.Count() 
+                TotalRecordCount = info.result.Count()
             };
         }
 
@@ -298,7 +298,7 @@ namespace MediaBrowser.Channels.Vevo
                 url = String.Format(
                     "http://api.vevo.com/mobile/v1/video/list.json?max={0}&offset={1}&extended=true",
                     query.Limit, offset);
-               
+
                 if (genre != "nogenre")
                     url = url + "&genre=" + genre;
                 if (request != "norequest")
@@ -329,9 +329,9 @@ namespace MediaBrowser.Channels.Vevo
                         ContentType = ChannelMediaContentType.Clip,
                         MediaType = ChannelMediaType.Video,
                         DateCreated = DateTime.Parse(i.created_at)
-                        
+
                     };
-                    
+
                     var overview = "";
                     if (artists.Count == 1)
                     {
@@ -401,7 +401,7 @@ namespace MediaBrowser.Channels.Vevo
                     foreach (var v in info.video.videoVersions)
                     {
                         var data = v.data;
-        
+
                         if (v.sourceType == 2)
                         {
                             page.LoadHtml(data);

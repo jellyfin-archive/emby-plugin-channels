@@ -52,7 +52,7 @@ namespace MediaBrowser.Plugins.Trailers.Providers
                 info.VideoBitrate = url.IndexOf("apple", StringComparison.OrdinalIgnoreCase) == -1 ? 3000000 : 11000000;
 
                 level = (float)3.1;
-                
+
                 if (url.IndexOf("apple", StringComparison.OrdinalIgnoreCase) != -1)
                 {
                     profile = "high";

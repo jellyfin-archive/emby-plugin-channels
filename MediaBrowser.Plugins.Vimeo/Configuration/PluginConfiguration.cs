@@ -21,7 +21,7 @@ namespace MediaBrowser.Plugins.Vimeo.Configuration
         public PluginConfiguration()
             : base()
         {
-            
+
         }
     }
 }

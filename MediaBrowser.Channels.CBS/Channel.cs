@@ -153,7 +153,7 @@ namespace MediaBrowser.Channels.CBS
 
                     var url = String.Format("http://www.cbs.com/carousels/videosBySection/{0}/offset/0/limit/15/xs/0",
                         idSplit[2]);
-                    
+
                     using (var json = await _httpClient.Get(url,
                                     CancellationToken.None).ConfigureAwait(false))
                     {
@@ -256,7 +256,7 @@ namespace MediaBrowser.Channels.CBS
                 using (var reader = new StreamReader(site))
                 {
                     var html = await reader.ReadToEndAsync().ConfigureAwait(false);
-                    
+
                     var productionNode = Regex.Match(html, "video.settings.pid = '(?<pid>[^']+)';", RegexOptions.IgnoreCase);
                     var productionID = productionNode.Groups["pid"].Value;
 
@@ -277,8 +277,8 @@ namespace MediaBrowser.Channels.CBS
                             });
                             return items;
                         }
-                        
-                        
+
+
                         var rtmp_urlNode = page.DocumentNode.SelectSingleNode("//meta[starts-with(@base, \"rtmp\")]");
                         var rtmp_url = "";
                         if (rtmp_urlNode != null)

@@ -140,7 +140,7 @@ namespace MediaBrowser.Plugins.Vimeo
             cookie = new Cookie();
             build = new Build();
             urls = new Urls();
-            
+
         }
     }
 

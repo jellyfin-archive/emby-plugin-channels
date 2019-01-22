@@ -43,8 +43,8 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
         {
             public int Compare(QueryParameter x, QueryParameter y)
             {
-                return x.Name == y.Name 
-                    ? String.CompareOrdinal(x.Value, y.Value) 
+                return x.Name == y.Name
+                    ? String.CompareOrdinal(x.Value, y.Value)
                     : String.CompareOrdinal(x.Name, y.Name);
             }
         }
@@ -69,14 +69,14 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
 
         protected Random random = new Random();
 
-        protected static string unreservedChars = 
+        protected static string unreservedChars =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 
         /// <summary>
         /// Helper function to compute a hash value
         /// </summary>
-        /// <param name="hashAlgorithm">The hashing algoirhtm used. If that algorithm needs 
-        /// some initialization, like HMAC and its derivatives, they should be initialized 
+        /// <param name="hashAlgorithm">The hashing algoirhtm used. If that algorithm needs
+        /// some initialization, like HMAC and its derivatives, they should be initialized
         /// prior to passing it to this function</param>
         /// <param name="data">The data to hash</param>
         /// <returns>a Base64 string of the hash value</returns>
@@ -95,11 +95,11 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
         }
 
         /// <summary>
-        /// Internal function to cut out all non oauth query string parameters 
+        /// Internal function to cut out all non oauth query string parameters
         /// (all parameters not begining with "oauth_")
         /// </summary>
         /// <param name="parameters">The query string part of the Url</param>
-        /// <returns>A list of QueryParameter each containing the parameter name and 
+        /// <returns>A list of QueryParameter each containing the parameter name and
         /// value</returns>
         private static List<QueryParameter> GetQueryParameters(string parameters)
         {
@@ -127,9 +127,9 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
         }
 
         /// <summary>
-        /// This is a different Url Encode implementation since the default 
+        /// This is a different Url Encode implementation since the default
         /// .NET one outputs the percent encoding in lower case.
-        /// While this is not a problem with the percent encoding spec, 
+        /// While this is not a problem with the percent encoding spec,
         /// it is used in upper case throughout OAuth
         /// </summary>
         /// <param name="value">The value to Url encode</param>
@@ -172,24 +172,24 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
         /// <summary>
         /// Generate the signature base that is used to produce the signature
         /// </summary>
-        /// <param name="url">The full url that needs to be signed including 
+        /// <param name="url">The full url that needs to be signed including
         /// its non OAuth url parameters</param>
-        /// <param name="consumerKey">The consumer key</param>        
-        /// <param name="token">The token, if available. If not available 
+        /// <param name="consumerKey">The consumer key</param>
+        /// <param name="token">The token, if available. If not available
         /// pass null or an empty string</param>
-        /// <param name="tokenSecret">The token secret, if available. If not 
+        /// <param name="tokenSecret">The token secret, if available. If not
         /// available pass null or an empty string</param>
-        /// <param name="httpMethod">The http method used. Must be a valid HTTP 
+        /// <param name="httpMethod">The http method used. Must be a valid HTTP
         /// method verb (POST,GET,PUT, etc)</param>
-        /// <param name="signatureType">The signature type. To use the default 
+        /// <param name="signatureType">The signature type. To use the default
         /// values use <see cref="OAuthBase.OAuthSignatureType">
         /// OAuthBase.OAuthSignatureType</see>.
         /// </param>
         /// <returns>The signature base</returns>
-        
-        public string GenerateSignatureBase(Uri url, string consumerKey, string token, 
-            string tokenSecret, string httpMethod, string timeStamp, string nonce, 
-            string signatureType, out string normalizedUrl, 
+
+        public string GenerateSignatureBase(Uri url, string consumerKey, string token,
+            string tokenSecret, string httpMethod, string timeStamp, string nonce,
+            string signatureType, out string normalizedUrl,
             out string normalizedRequestParameters, bool addCallBack)
         {
             if (token == null)
@@ -216,10 +216,10 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
             parameters.Add(new QueryParameter(OAuthTimestampKey, timeStamp));
             parameters.Add(new QueryParameter(OAuthSignatureMethodKey, signatureType));
             parameters.Add(new QueryParameter(OAuthConsumerKeyKey, consumerKey));
-            
+
             //As suggested by Steven
             if (addCallBack)
-                parameters.Add(new QueryParameter(OAuthCallbackKey, "oob")); 
+                parameters.Add(new QueryParameter(OAuthCallbackKey, "oob"));
 
             if (!string.IsNullOrEmpty(token))
                 parameters.Add(new QueryParameter(OAuthTokenKey, token));
@@ -239,7 +239,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
 
             normalizedUrl = string.Format("{0}://{1}", url.Scheme, url.Host);
 
-            if (!((url.Scheme == "http" && url.Port == 80) || 
+            if (!((url.Scheme == "http" && url.Port == 80) ||
                 (url.Scheme == "https" && url.Port == 443)))
                 normalizedUrl += ":" + url.Port;
 
@@ -258,10 +258,10 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
         /// Generate the signature value based on the given signature base
         /// and hash algorithm
         /// </summary>
-        /// <param name="signatureBase">The signature based as produced 
+        /// <param name="signatureBase">The signature based as produced
         /// by the GenerateSignatureBase method or by any other means</param>
-        /// <param name="hash">The hash algorithm used to perform the hashing. 
-        /// If the hashing algorithm requires initialization or a key it 
+        /// <param name="hash">The hash algorithm used to perform the hashing.
+        /// If the hashing algorithm requires initialization or a key it
         /// should be set prior to calling this method</param>
         /// <returns>A base64 string of the hash value</returns>
         public string GenerateSignatureUsingHash(string signatureBase, HashAlgorithm hash)
@@ -271,45 +271,45 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
 
         /// <summary>
         /// Generates a signature using the HMAC-SHA1 algorithm
-        /// </summary>		
-        /// <param name="url">The full url that needs to be signed including its 
+        /// </summary>
+        /// <param name="url">The full url that needs to be signed including its
         /// non OAuth url parameters</param>
         /// <param name="consumerKey">The consumer key</param>
         /// <param name="consumerSecret">The consumer seceret</param>
-        /// <param name="token">The token, if available. If not available pass 
+        /// <param name="token">The token, if available. If not available pass
         /// null or an empty string</param>
-        /// <param name="tokenSecret">The token secret, if available. If not 
+        /// <param name="tokenSecret">The token secret, if available. If not
         /// available pass null or an empty string</param>
-        /// <param name="httpMethod">The http method used. Must be a valid HTTP 
+        /// <param name="httpMethod">The http method used. Must be a valid HTTP
         /// method verb (POST,GET,PUT, etc)</param>
         /// <returns>A base64 string of the hash value</returns>
-        public string GenerateSignature(Uri url, string consumerKey, string consumerSecret, 
-            string token, string tokenSecret, string httpMethod, string timeStamp, 
+        public string GenerateSignature(Uri url, string consumerKey, string consumerSecret,
+            string token, string tokenSecret, string httpMethod, string timeStamp,
             string nonce, out string normalizedUrl, out string normalizedRequestParameters, bool addCallBack)
         {
-            return GenerateSignature(url, consumerKey, consumerSecret, token, tokenSecret, 
-                httpMethod, timeStamp, nonce, OAuthSignatureType.HMACSHA1, out normalizedUrl, 
+            return GenerateSignature(url, consumerKey, consumerSecret, token, tokenSecret,
+                httpMethod, timeStamp, nonce, OAuthSignatureType.HMACSHA1, out normalizedUrl,
                 out normalizedRequestParameters, addCallBack);
         }
 
         /// <summary>
-        /// Generates a signature using the specified signatureType 
-        /// </summary>		
-        /// <param name="url">The full url that needs to be signed including 
+        /// Generates a signature using the specified signatureType
+        /// </summary>
+        /// <param name="url">The full url that needs to be signed including
         /// its non OAuth url parameters</param>
         /// <param name="consumerKey">The consumer key</param>
         /// <param name="consumerSecret">The consumer seceret</param>
-        /// <param name="token">The token, if available. If not available pass 
+        /// <param name="token">The token, if available. If not available pass
         /// null or an empty string</param>
-        /// <param name="tokenSecret">The token secret, if available. If not 
+        /// <param name="tokenSecret">The token secret, if available. If not
         /// available pass null or an empty string</param>
-        /// <param name="httpMethod">The http method used. Must be a valid HTTP 
+        /// <param name="httpMethod">The http method used. Must be a valid HTTP
         /// method verb (POST,GET,PUT, etc)</param>
         /// <param name="signatureType">The type of signature to use</param>
         /// <returns>A base64 string of the hash value</returns>
-        public string GenerateSignature(Uri url, string consumerKey, string consumerSecret, 
-            string token, string tokenSecret, string httpMethod, string timeStamp, 
-            string nonce, OAuthSignatureType signatureType, out string normalizedUrl, 
+        public string GenerateSignature(Uri url, string consumerKey, string consumerSecret,
+            string token, string tokenSecret, string httpMethod, string timeStamp,
+            string nonce, OAuthSignatureType signatureType, out string normalizedUrl,
             out string normalizedRequestParameters, bool addCallBack)
         {
             normalizedUrl = null;
@@ -321,8 +321,8 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
                     return WebUtility.UrlEncode(
                         string.Format("{0}&{1}", consumerSecret, tokenSecret));
                 case OAuthSignatureType.HMACSHA1:
-                    var signatureBase = GenerateSignatureBase(url, consumerKey, 
-                        token, tokenSecret, 
+                    var signatureBase = GenerateSignatureBase(url, consumerKey,
+                        token, tokenSecret,
                         httpMethod, timeStamp, nonce, HMACSHA1SignatureType,
                         out normalizedUrl, out normalizedRequestParameters, addCallBack);
 
@@ -330,10 +330,10 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
                                        {
                                            Key = Encoding.UTF8.GetBytes(
                                            //Key = Encoding.ASCII.GetBytes(
-                                                string.Format("{0}&{1}", 
+                                                string.Format("{0}&{1}",
                                                 UrlEncode(consumerSecret),
-                                                string.IsNullOrEmpty(tokenSecret) 
-                                                    ? "" 
+                                                string.IsNullOrEmpty(tokenSecret)
+                                                    ? ""
                                                     : UrlEncode(tokenSecret)))
                                        };
 
@@ -346,7 +346,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
         }
 
         /// <summary>
-        /// Generate the timestamp for the signature        
+        /// Generate the timestamp for the signature
         /// </summary>
         /// <returns></returns>
         public virtual string GenerateTimeStamp()
@@ -363,7 +363,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
         static int nounceCount = 0;
         public virtual string GenerateNonce()
         {
-            // The old version was just a simple implementation 
+            // The old version was just a simple implementation
             // of "a random number between 123400 and 9999999"
             // which was crappy. To avoid duplicates, I'll insert
             // the current time somewhere in between. Ha!

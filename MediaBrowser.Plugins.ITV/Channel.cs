@@ -177,11 +177,11 @@ namespace MediaBrowser.Plugins.ITV
                             title = node.SelectSingleNode("//h2[@class='title episode-title']").InnerText.Replace("&#039;", "'");
                         else if (node.SelectSingleNode(".//div[@class='programme-title']//text()") != null)
                             title = node.SelectSingleNode(".//div[@class='programme-title']//text()").InnerText.Replace("&#039;", "'");
-                      
+
                         var seasonNumber = "";
                         if (node.SelectSingleNode(".//div[contains(@class, 'field-name-field-season-number')]//text()") != null)
                             seasonNumber = node.SelectSingleNode(".//div[contains(@class, 'field-name-field-season-number')]//text()").InnerText;
-                       
+
                         var episodeNumber = "";
                         if (node.SelectSingleNode(".//div[contains(@class, 'field-name-field-episode-number')]//text()") != null)
                             episodeNumber = node.SelectSingleNode(".//div[contains(@class, 'field-name-field-episode-number')]//text()").InnerText;
@@ -199,7 +199,7 @@ namespace MediaBrowser.Plugins.ITV
                         var date = "";
                         if (node.SelectSingleNode(".//span[contains(@class,'date-display-single')]") != null)
                             date = node.SelectSingleNode(".//span[contains(@class,'date-display-single')]").Attributes["content"].Value;
-                        
+
                         // TODO : FIX ME !
                         var durText = node.SelectSingleNode(".//div[contains(@class,'field-name-field-duration')]//div[contains(@class, 'field-item')]").InnerText;
 
@@ -254,12 +254,12 @@ namespace MediaBrowser.Plugins.ITV
             var items = new List<ChannelItemInfo>();
 
             foreach (var genre in data.Genres)
-            { 
+            {
                 items.Add(new ChannelItemInfo
                 {
                     Name = genre.name,
                     Id = "programs_" + "https://www.itv.com/itvplayer/categories/" + genre.fname + "/popular/catch-up",
-                    Type = ChannelItemType.Folder, 
+                    Type = ChannelItemType.Folder,
                     ImageUrl = genre.thumb
                 });
             }
@@ -457,7 +457,7 @@ namespace MediaBrowser.Plugins.ITV
                         RequestContent = SM_TEMPLATE,
                         Referer = "http://www.itv.com/mercury/Mercury_VideoPlayer.swf?v=1.6.479/[[DYNAMIC]]/2"
                     };
-                    
+
                     request.RequestHeaders.Add("SOAPAction", "http://tempuri.org/PlaylistService/GetPlaylist");
 
                     using (var player = _httpClient.SendAsync(request, "POST"))
