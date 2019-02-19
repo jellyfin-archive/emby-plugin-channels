@@ -43,7 +43,6 @@ namespace MediaBrowser.Plugins.Vimeo
         {
             var vals = new List<string>();
 
-            vals.Add(RegistrationInfo.Instance.IsRegistered.ToString());
             vals.Add(Plugin.Instance.Configuration.Username ?? string.Empty);
 
             return string.Join("-", vals.ToArray());
@@ -79,30 +78,6 @@ namespace MediaBrowser.Plugins.Vimeo
 
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            if (!RegistrationInfo.Instance.IsRegistered)
-            {
-                var list = new List<ChannelItemInfo>
-                {
-                    new ChannelItemInfo
-                    {
-                         Id = "notregistered",
-                         Name = "Supporter membership required",
-                         Type = ChannelItemType.Folder
-                    }
-                };
-
-                return new ChannelItemResult
-                {
-                    Items = list,
-                    TotalRecordCount = list.Count
-                };
-            }
-
-            if (string.Equals(query.FolderId, "notregistered", StringComparison.OrdinalIgnoreCase))
-            {
-                return new ChannelItemResult();
-            }
-
             if (string.IsNullOrEmpty(query.FolderId))
             {
                 return await GetCategories(query, cancellationToken).ConfigureAwait(false);

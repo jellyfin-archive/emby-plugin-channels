@@ -1,6 +1,5 @@
 using System;
 using MediaBrowser.Controller.Net;
-using MediaBrowser.Controller.Security;
 using MediaBrowser.Model.Querying;
 using MediaBrowser.Model.Services;
 using MediaBrowser.Plugins.Vimeo.Configuration;

@@ -60,8 +60,7 @@ namespace MediaBrowser.Plugins.Trailers
             return Plugin.Instance.Configuration.EnableMovieArchive + "-" +
                    Plugin.Instance.Configuration.EnableDvd + "-" +
                    Plugin.Instance.Configuration.EnableNetflix + "-" +
-                   Plugin.Instance.Configuration.EnableTheaters + "-" +
-                   RegistrationInfo.Instance.IsRegistered;
+                   Plugin.Instance.Configuration.EnableTheaters;
         }
 
         public string Description
@@ -83,32 +82,8 @@ namespace MediaBrowser.Plugins.Trailers
             return DateTime.MinValue;
         }
 
-        private ChannelItemResult GetNonSupporterItems()
-        {
-            var list = new List<ChannelItemInfo>
-                {
-                    new ChannelItemInfo
-                    {
-                         Id = "notregistered",
-                         Name = "Supporter membership required",
-                         Type = ChannelItemType.Folder
-                    }
-                };
-
-            return new ChannelItemResult
-            {
-                Items = list,
-                TotalRecordCount = list.Count
-            };
-        }
-
         public async Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            if (!RegistrationInfo.Instance.IsRegistered)
-            {
-                return GetNonSupporterItems();
-            }
-
             if (string.IsNullOrEmpty(query.FolderId))
             {
                 return GetTopCategories();
@@ -270,11 +245,6 @@ namespace MediaBrowser.Plugins.Trailers
 
         public async Task<IEnumerable<ChannelItemInfo>> GetAllItems(bool direct, CancellationToken cancellationToken)
         {
-            if (!RegistrationInfo.Instance.IsRegistered)
-            {
-                return GetNonSupporterItems().Items;
-            }
-
             if (direct)
             {
                 return await GetDirectListings(cancellationToken).ConfigureAwait(false);

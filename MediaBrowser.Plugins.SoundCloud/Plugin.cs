@@ -10,7 +10,6 @@ using MediaBrowser.Common.Net;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Controller.Channels;
 using MediaBrowser.Controller.Notifications;
-using MediaBrowser.Controller.Security;
 using MediaBrowser.Model.Notifications;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
