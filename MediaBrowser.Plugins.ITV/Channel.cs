@@ -350,21 +350,21 @@ namespace MediaBrowser.Plugins.ITV
                     html = html.Replace("&#039", "'");
 
                     var productionNode = Regex.Match(html, "\"productionId\":\"(.*?)\"", RegexOptions.IgnoreCase);
-                    var productionID = productionNode.Groups[0].Value;
+                    var productionId = productionNode.Groups[0].Value;
 
-                    productionID = productionID.Replace(@"\", "");
-                    productionID = productionID.Replace("\"productionId\":\"", "");
-                    productionID = productionID.Replace("\"", "");
+                    productionId = productionId.Replace(@"\", "");
+                    productionId = productionId.Replace("\"productionId\":\"", "");
+                    productionId = productionId.Replace("\"", "");
 
-                    _logger.LogDebug("Production ID : {Id}", productionID);
+                    _logger.LogDebug("Production ID : {Id}", productionId);
 
                     var SM_TEMPLATE =
-                        String.Format(@"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:tem=""http://tempuri.org/"" xmlns:itv=""http://schemas.datacontract.org/2004/07/Itv.BB.Mercury.Common.Types"" xmlns:com=""http://schemas.itv.com/2009/05/Common"">
+                        string.Format(@"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:tem=""http://tempuri.org/"" xmlns:itv=""http://schemas.datacontract.org/2004/07/Itv.BB.Mercury.Common.Types"" xmlns:com=""http://schemas.itv.com/2009/05/Common"">
 	                  <soapenv:Header/>
 	                  <soapenv:Body>
 		                <tem:GetPlaylist>
 		                  <tem:request>
-		                <itv:ProductionId>{0}</itv:ProductionId>
+		                <itv:ProductionId>{ProductionId}</itv:ProductionId>
 		                <itv:RequestGuid>FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF</itv:RequestGuid>
 		                <itv:Vodcrid>
 		                  <com:Id/>
@@ -399,7 +399,7 @@ namespace MediaBrowser.Plugins.ITV
 		                </tem:GetPlaylist>
 	                  </soapenv:Body>
 	                </soapenv:Envelope>
-	                ", productionID);
+	                ", productionId);
 
                     // TODO: Need to convert this to httpclient for compatibility
 

@@ -147,7 +147,7 @@ namespace MediaBrowser.Channels.Adult.RedTube
 
             using (var site = await _httpClient.Get(new HttpRequestOptions
             {
-                Url = String.Format("http://api.redtube.com/?data=redtube.Videos.searchVideos&output=json&category={0}&thumbsize=large&page={1}", query.FolderId, page)
+                Url = string.Format("http://api.redtube.com/?data=redtube.Videos.searchVideos&output=json&category={Id}&thumbsize=large&page={Page}", query.FolderId, page)
             }).ConfigureAwait(false))
             {
                 var videos = _jsonSerializer.DeserializeFromStream<RootObject>(site);

@@ -106,7 +106,7 @@ namespace MediaBrowser.Channels.CBS
 
             using (var site = await _httpClient.Get(new HttpRequestOptions
             {
-                Url = String.Format("http://www.cbs.com/carousels/showsByCategory/{0}/offset/0/limit/99/", query.FolderId)
+                Url = string.Format("http://www.cbs.com/carousels/showsByCategory/{Id}/offset/0/limit/99/", query.FolderId)
             }).ConfigureAwait(false))
             {
                 var showList = _jsonSerializer.DeserializeFromStream<ShowList>(site);
@@ -157,7 +157,7 @@ namespace MediaBrowser.Channels.CBS
 
                     _logger.LogDebug("{0} {1} {2}", idSplit[0], idSplit[1], idSplit[2]);
 
-                    var url = String.Format("http://www.cbs.com/carousels/videosBySection/{0}/offset/0/limit/15/xs/0",
+                    var url = string.Format("http://www.cbs.com/carousels/videosBySection/{Id}/offset/0/limit/15/xs/0",
                         idSplit[2]);
 
                     using (var json = await _httpClient.Get(new HttpRequestOptions

@@ -19,7 +19,7 @@ namespace MediaBrowser.Channels.LeagueOfLegends.Vimeo
 
         public Task<VimeoVideo> GetBroadcast(string id, CancellationToken cancellationToken)
         {
-            string url = string.Format("/video/{0}/config?type=moogaloop&referrer=&player_url=player.vimeo.com&v=1.0.0&cdn_url=http://a.vimeocdn.com", id);
+            string url = string.Format("/video/{Id}/config?type=moogaloop&referrer=&player_url=player.vimeo.com&v=1.0.0&cdn_url=http://a.vimeocdn.com", id);
             return ExecuteRequest<VimeoVideo>(url, cancellationToken);
         }
     }

@@ -98,7 +98,7 @@ namespace MediaBrowser.Plugins.SoundCloud
                     }
                     else
                     {
-                        msg = string.Format("{0}\n\nAttention: You need to wait up to 3 minutes before retrying!", msg);
+                        msg = string.Format("{Msg}\n\nAttention: You need to wait up to 3 minutes before retrying!", msg);
                         throw new Exception(msg);
                     }
                 }

@@ -218,8 +218,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                         {
                             FolderType = ChannelFolderType.Container,
                             MediaType = ChannelMediaType.Audio,
-                            Name = string.Format("My Tracks [{0}]", user.track_count),
-                            Id = string.Format("usertracks_{0}", user.id),
+                            Name = string.Format("My Tracks [{TrackCount}]", user.track_count),
+                            Id = string.Format("usertracks_{Id}", user.id),
                             Type = ChannelItemType.Folder,
                             ImageUrl = this.FixArtworkUrl(user.avatar_url)
                         });
@@ -231,8 +231,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                         {
                             FolderType = ChannelFolderType.Container,
                             MediaType = ChannelMediaType.Audio,
-                            Name = string.Format("My Playlists [{0}]", user.playlist_count),
-                            Id = string.Format("userplaylists_{0}", user.id),
+                            Name = string.Format("My Playlists [{PlaylistCount}]", user.playlist_count),
+                            Id = string.Format("userplaylists_{Id}", user.id),
                             Type = ChannelItemType.Folder,
                             ImageUrl = this.FixArtworkUrl(user.avatar_url)
                         });
@@ -244,8 +244,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                         {
                             FolderType = ChannelFolderType.Container,
                             MediaType = ChannelMediaType.Audio,
-                            Name = string.Format("I'm Following [{0}]", user.followings_count),
-                            Id = string.Format("followings_{0}", user.id),
+                            Name = string.Format("I'm Following [{FollowingsCount}]", user.followings_count),
+                            Id = string.Format("followings_{Id}", user.id),
                             Type = ChannelItemType.Folder,
                             ImageUrl = this.FixArtworkUrl(user.avatar_url)
                         });
@@ -257,8 +257,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                         {
                             FolderType = ChannelFolderType.Container,
                             MediaType = ChannelMediaType.Audio,
-                            Name = string.Format("My Followers [{0}]", user.followers_count),
-                            Id = string.Format("followers_{0}", user.id),
+                            Name = string.Format("My Followers [{FollowersCount}]", user.followers_count),
+                            Id = string.Format("followers_{Id}", user.id),
                             Type = ChannelItemType.Folder,
                             ImageUrl = this.FixArtworkUrl(user.avatar_url)
                         });
@@ -270,8 +270,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                         {
                             FolderType = ChannelFolderType.Container,
                             MediaType = ChannelMediaType.Audio,
-                            Name = string.Format("My Favorites [{0}]", user.public_favorites_count),
-                            Id = string.Format("favorites_{0}", user.id),
+                            Name = string.Format("My Favorites [{FavoritesCount}]", user.public_favorites_count),
+                            Id = string.Format("favorites_{Id}", user.id),
                             Type = ChannelItemType.Folder,
                             ImageUrl = this.FixArtworkUrl(user.avatar_url)
                         });
@@ -323,8 +323,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                     {
                         FolderType = ChannelFolderType.Container,
                         MediaType = ChannelMediaType.Audio,
-                        Name = string.Format("{0}: Tracks [{1}]", user.username, user.track_count),
-                        Id = string.Format("usertracks_{0}", user.id),
+                        Name = string.Format("{Username}: Tracks [{TrackCount}]", user.username, user.track_count),
+                        Id = string.Format("usertracks_{Id}", user.id),
                         Type = ChannelItemType.Folder,
                         ImageUrl = this.FixArtworkUrl(user.avatar_url)
                     });
@@ -336,8 +336,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                     {
                         FolderType = ChannelFolderType.Container,
                         MediaType = ChannelMediaType.Audio,
-                        Name = string.Format("{0}: Playlists [{1}]", user.username, user.playlist_count),
-                        Id = string.Format("userplaylists_{0}", user.id),
+                        Name = string.Format("{Username}: Playlists [{PlaylistCount}]", user.username, user.playlist_count),
+                        Id = string.Format("userplaylists_{Id}", user.id),
                         Type = ChannelItemType.Folder,
                         ImageUrl = this.FixArtworkUrl(user.avatar_url)
                     });
@@ -349,8 +349,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                     {
                         FolderType = ChannelFolderType.Container,
                         MediaType = ChannelMediaType.Audio,
-                        Name = string.Format("{0}: Following [{1}]", user.username, user.followings_count),
-                        Id = string.Format("followings_{0}", user.id),
+                        Name = string.Format("{Username}: Following [{FollowingsCount}]", user.username, user.followings_count),
+                        Id = string.Format("followings_{Id}", user.id),
                         Type = ChannelItemType.Folder,
                         ImageUrl = this.FixArtworkUrl(user.avatar_url)
                     });
@@ -362,8 +362,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                     {
                         FolderType = ChannelFolderType.Container,
                         MediaType = ChannelMediaType.Audio,
-                        Name = string.Format("{0}: Followers [{1}]", user.username, user.followers_count),
-                        Id = string.Format("followers_{0}", user.id),
+                        Name = string.Format("{Username}: Followers [{FollowersCount}]", user.username, user.followers_count),
+                        Id = string.Format("followers_{Id}", user.id),
                         Type = ChannelItemType.Folder,
                         ImageUrl = this.FixArtworkUrl(user.avatar_url)
                     });
@@ -375,8 +375,8 @@ namespace MediaBrowser.Plugins.SoundCloud
                     {
                         FolderType = ChannelFolderType.Container,
                         MediaType = ChannelMediaType.Audio,
-                        Name = string.Format("{0}: Favorites [{1}]", user.username, user.public_favorites_count),
-                        Id = string.Format("favorites_{0}", user.id),
+                        Name = string.Format("{Username}: Favorites [{FavoritesCount}]", user.username, user.public_favorites_count),
+                        Id = string.Format("favorites_{Id}", user.id),
                         Type = ChannelItemType.Folder,
                         ImageUrl = this.FixArtworkUrl(user.avatar_url)
                     });
@@ -702,7 +702,7 @@ namespace MediaBrowser.Plugins.SoundCloud
                 {
                     PremiereDate = premiereDate,
                     DateCreated = DateTime.Parse(playlist.created_at),
-                    Id = string.Format("playlist_{0}", playlist.id),
+                    Id = string.Format("playlist_{Id}", playlist.id),
                     ImageUrl = this.FixArtworkUrl(playlist.artwork_url, playlist.user.avatar_url),
                     Name = playlist.title,
                     Type = ChannelItemType.Folder,
@@ -732,7 +732,7 @@ namespace MediaBrowser.Plugins.SoundCloud
                     CommunityRating = Convert.ToSingle(origin.likes_count),
                     PremiereDate = premiereDate,
                     DateCreated = DateTime.Parse(created),
-                    Id = string.Format("playlist_{0}", origin.id),
+                    Id = string.Format("playlist_{Id}", origin.id),
                     ImageUrl = this.FixArtworkUrl(origin.artwork_url),
                     Name = origin.title,
                     Type = ChannelItemType.Folder,
@@ -751,7 +751,7 @@ namespace MediaBrowser.Plugins.SoundCloud
             return new ChannelItemInfo
                 {
                     CommunityRating = user.followers_count,
-                    Id = string.Format("user_{0}", user.id),
+                    Id = string.Format("user_{Id}", user.id),
                     ImageUrl = this.FixArtworkUrl(user.avatar_url),
                     MediaType = ChannelMediaType.Audio,
                     Name = user.username,
@@ -799,7 +799,7 @@ namespace MediaBrowser.Plugins.SoundCloud
                     CommunityRating = user.followers_count,
                     Type = ChannelItemType.Folder,
                     FolderType = ChannelFolderType.MusicArtist,
-                    Id = string.Format("userinfo_{0}", user.id),
+                    Id = string.Format("userinfo_{Id}", user.id),
                     ImageUrl = this.FixArtworkUrl(user.avatar_url),
                     Name = user.username,
                     Overview = user.description,
@@ -816,7 +816,7 @@ namespace MediaBrowser.Plugins.SoundCloud
                 return null;
             }
 
-            return string.Format("{0}?client_id={1}", url, SoundCloudApi.ClientIdForTracks);
+            return string.Format("{Url}?client_id={ClientId}", url, SoundCloudApi.ClientIdForTracks);
         }
 
         private string FixArtworkUrl(string url, string alternateUrl = null)

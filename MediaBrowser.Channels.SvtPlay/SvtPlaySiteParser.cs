@@ -46,7 +46,7 @@ namespace MediaBrowser.Channels.SvtPlay
             folder.FolderType = MediaBrowser.Model.Channels.ChannelFolderType.Container;
             folder.Type = ChannelItemType.Folder;
             folder.Name = title;
-            folder.Id = string.Format("{0}_{1}", id, url);
+            folder.Id = string.Format("{Id}_{Url}", id, url);
             if (child != null)
                 folder.ImageUrl = child.ImageUrl;
             return folder;

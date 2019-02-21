@@ -25,15 +25,15 @@ namespace MediaBrowser.Channels.LeagueOfLegends.LolEventVods
         public async Task<Events> GetEvents(int limit, string after, CancellationToken cancellationToken)
         {
             string url = string.IsNullOrEmpty(after)
-                ? string.Format("/r/loleventvods/.json?limit={0}", limit)
-                : string.Format("/r/loleventvods/.json?limit={0}&after={1}", limit, after);
+                ? string.Format("/r/loleventvods/.json?limit={Limit}", limit)
+                : string.Format("/r/loleventvods/.json?limit={Limit}&after={After}", limit, after);
             var listing = await ExecuteRequest<RedditListing>(url, cancellationToken);
             return TransformListingToEvents(listing);
         }
 
         public async Task<IEnumerable<Day>> GetEventDays(string eventId, CancellationToken cancellationToken)
         {
-            string url = string.Format("/r/loleventvods/comments/{0}/.json", eventId);
+            string url = string.Format("/r/loleventvods/comments/{Id}/.json", eventId);
             var listing = await ExecuteRequest<List<RedditListing>>(url, cancellationToken);
             return TransformListingToEventContent(listing[0]);
         }

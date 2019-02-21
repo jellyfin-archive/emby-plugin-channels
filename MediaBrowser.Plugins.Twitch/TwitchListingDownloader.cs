@@ -18,13 +18,13 @@ namespace MediaBrowser.Plugins.Twitch
             _httpClient = httpClient;
         }
 
-        public async Task<RootObject> GetStreamList(String catID, int offset, CancellationToken cancellationToken)
+        public async Task<RootObject> GetStreamList(String catId, int offset, CancellationToken cancellationToken)
         {
             RootObject reg;
 
             using (var json = await _httpClient.Get(new HttpRequestOptions
             {
-                Url = string.Format("https://api.twitch.tv/kraken/streams?game={0}&offset={1}", catID, offset)
+                Url = string.Format("https://api.twitch.tv/kraken/streams?game={CatId}&offset={Offset}", catId, offset)
             }).ConfigureAwait(false))
             {
                 reg = _jsonSerializer.DeserializeFromStream<RootObject>(json);

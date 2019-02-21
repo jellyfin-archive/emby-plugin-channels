@@ -255,7 +255,7 @@ namespace MediaBrowser.Channels.Vevo
         {
             var offset = query.StartIndex.GetValueOrDefault();
             var items = new List<ChannelItemInfo>();
-            var url = String.Format("http://api.vevo.com/mobile/v1/artist/list.json?max={0}&offset={1}&extended=true",
+            var url = string.Format("http://api.vevo.com/mobile/v1/artist/list.json?max={Limit}&offset={Offset}&extended=true",
                 query.Limit, offset);
             Info.ArtistList info;
 
@@ -300,8 +300,8 @@ namespace MediaBrowser.Channels.Vevo
 
             if (type == "video")
             {
-                url = String.Format(
-                    "http://api.vevo.com/mobile/v1/video/list.json?max={0}&offset={1}&extended=true",
+                url = string.Format(
+                    "http://api.vevo.com/mobile/v1/video/list.json?max={Limit}&offset={Offset}&extended=true",
                     query.Limit, offset);
 
                 if (genre != "nogenre")
@@ -311,8 +311,8 @@ namespace MediaBrowser.Channels.Vevo
             }
             else
             {
-                url = String.Format(
-                    "http://api.vevo.com/mobile/v1/artist/{0}/videos.json?max={1}&extended=true",
+                url = string.Format(
+                    "http://api.vevo.com/mobile/v1/artist/{Artist}/videos.json?max={Limit}&extended=true",
                     request, query.Limit);
             }
 

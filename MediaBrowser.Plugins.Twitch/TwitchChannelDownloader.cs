@@ -23,7 +23,7 @@ namespace MediaBrowser.Plugins.Twitch
 
             using (var json = await _httpClient.Get(new HttpRequestOptions
             {
-                Url = String.Format("https://api.twitch.tv/kraken/games/top?limit=100&offset={0}", offset)
+                Url = string.Format("https://api.twitch.tv/kraken/games/top?limit=100&offset={Offset}", offset)
             }).ConfigureAwait(false))
             {
                 reg = _jsonSerializer.DeserializeFromStream<RootObject>(json);

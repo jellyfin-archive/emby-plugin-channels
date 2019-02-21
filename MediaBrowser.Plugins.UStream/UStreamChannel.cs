@@ -112,7 +112,7 @@ namespace MediaBrowser.Plugins.UStream
 
             using (var site = await _httpClient.Get(new HttpRequestOptions
             {
-                Url = String.Format("http://www.ustream.tv/new/explore/{0}/all", query.FolderId)
+                Url = string.Format("http://www.ustream.tv/new/explore/{Id}/all", query.FolderId)
             }).ConfigureAwait(false))
             {
                 page.Load(site, Encoding.UTF8);
@@ -145,7 +145,7 @@ namespace MediaBrowser.Plugins.UStream
 
             using (var json = await _httpClient.Get(new HttpRequestOptions
             {
-                Url = String.Format("http://www.ustream.tv/ajax-alwayscache/new/explore/{0}/all.json?subCategory={1}&type=live&location=anywhere&page={2}", mainCategory, query.FolderId, 1)
+                Url = string.Format("http://www.ustream.tv/ajax-alwayscache/new/explore/{Category}/all.json?subCategory={Id}&type=live&location=anywhere&page={Page}", mainCategory, query.FolderId, 1)
             }).ConfigureAwait(false))
             {
                 var reg = _jsonSerializer.DeserializeFromStream<RootObject>(json);

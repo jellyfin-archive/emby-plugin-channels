@@ -126,7 +126,7 @@ namespace MediaBrowser.Channels.Vineco
             TimelineList timelineList;
             using (var site = await _httpClient.Get(new HttpRequestOptions
             {
-                Url = String.Format("https://api.vineapp.com/timelines/channels/{0}/popular?size={1}", query.FolderId, query.Limit)
+                Url = string.Format("https://api.vineapp.com/timelines/channels/{Id}/popular?size={Limit}", query.FolderId, query.Limit)
             }).ConfigureAwait(false))
             {
                 timelineList = _jsonSerializer.DeserializeFromStream<TimelineList>(site);

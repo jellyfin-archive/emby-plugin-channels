@@ -22,17 +22,17 @@ namespace MediaBrowser.Channels.LeagueOfLegends
             }
             if (folderId.StartsWith(GameString))
             {
-                var match = Helpers.RegexMatch(folderId, "{0}-(?<gameId>.*)-{1}-(?<dayId>.*)-{2}-(?<eventId>.*)", GameString, DayString, EventString);
+                var match = Helpers.RegexMatch(folderId, "{Game}-(?<gameId>.*)-{Day}-(?<dayId>.*)-{Event}-(?<eventId>.*)", GameString, DayString, EventString);
                 return CreateGameFolderId(match.Groups["eventId"].Value, match.Groups["dayId"].Value, match.Groups["gameId"].Value);
             }
             if (folderId.StartsWith(DayString))
             {
-                var match = Helpers.RegexMatch(folderId, "{0}-(?<dayId>.*)-{1}-(?<eventId>.*)", DayString, EventString);
+                var match = Helpers.RegexMatch(folderId, "{Day}-(?<dayId>.*)-{Event}-(?<eventId>.*)", DayString, EventString);
                 return CreateDayFolderId(match.Groups["eventId"].Value, match.Groups["dayId"].Value);
             }
             if (folderId.StartsWith(EventString))
             {
-                var match = Helpers.RegexMatch(folderId, "{0}-(?<eventId>.*)", EventString);
+                var match = Helpers.RegexMatch(folderId, "{Event}-(?<eventId>.*)", EventString);
                 return CreateEventFolderId(match.Groups["eventId"].Value);
             }
             throw new ArgumentException("Argument format is not recognized. Only pass string which have been returned by FolderId.ToString().", "folderId");
@@ -75,11 +75,13 @@ namespace MediaBrowser.Channels.LeagueOfLegends
             switch (FolderIdType)
             {
                 case FolderIdType.Event:
-                    return string.Format("{0}-{1}", EventString, EventId);
+                    return string.Format("{Event}-{EventId}", EventString, EventId);
                 case FolderIdType.Day:
-                    return string.Format("{0}-{1}-{2}-{3}", DayString, DayId, EventString, EventId);
+                    return string.Format("{Day}-{DayId}-{Event}-{EventId}",
+                        DayString, DayId, EventString, EventId);
                 case FolderIdType.Game:
-                    return string.Format("{0}-{1}-{2}-{3}-{4}-{5}", GameString, GameId, DayString, DayId, EventString, EventId);
+                    return string.Format("{Game}-{GameId}-{Day}-{DayId}-{Event}-{EventId}",
+                        GameString, GameId, DayString, DayId, EventString, EventId);
                 default:
                     throw new NotSupportedException("Unknown FolderIdType: " + FolderIdType);
             }

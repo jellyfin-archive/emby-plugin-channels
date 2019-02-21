@@ -152,7 +152,7 @@ namespace MediaBrowser.Channels.LeagueOfLegends
             {
                 FolderType = ChannelFolderType.Container,
                 Id = folderId.ToString(),
-                Name = string.Format("{0} vs {1}", match.Team1, match.Team2),
+                Name = string.Format("{Team1} vs {Team2}", match.Team1, match.Team2),
                 Type = ChannelItemType.Folder
             };
         }

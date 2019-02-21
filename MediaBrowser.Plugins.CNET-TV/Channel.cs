@@ -153,7 +153,7 @@ namespace MediaBrowser.Plugins.CNETTV
                 page.Load(site, Encoding.UTF8);
                 if (page.DocumentNode != null)
                 {
-                    foreach (var node in page.DocumentNode.SelectNodes(String.Format("//ul[@id=\"{0}\"]/li/a", query.FolderId)))
+                    foreach (var node in page.DocumentNode.SelectNodes(string.Format("//ul[@id=\"{Id}\"]/li/a", query.FolderId)))
                     {
                         items.Add(new ChannelItemInfo
                         {
@@ -306,7 +306,7 @@ namespace MediaBrowser.Plugins.CNETTV
                             {
                                 items.Add(new ChannelMediaInfo
                                 {
-                                    Path = String.Format("http://link.theplatform.com/s/kYEXFC/{0}?&mbr=true", v.mpxPublicId)
+                                    Path = string.Format("http://link.theplatform.com/s/kYEXFC/{Id}?&mbr=true", v.mpxPublicId)
                                 });
                             }
                         }

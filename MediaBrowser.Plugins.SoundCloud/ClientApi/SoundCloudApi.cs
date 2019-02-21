@@ -53,14 +53,14 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
 
         public async Task<User> GetUser(int userId, CancellationToken cancellationToken)
         {
-            var query = string.Format("/users/{0}", userId);
+            var query = string.Format("/users/{Id}", userId);
             var user = await this.Execute<User>(query, cancellationToken);
             return user;
         }
 
         public async Task<Playlist> GetPlaylist(int playlistId, CancellationToken cancellationToken)
         {
-            var query = string.Format("/playlists/{0}", playlistId);
+            var query = string.Format("/playlists/{Id}", playlistId);
 
             return await this.Execute<Playlist>(query, cancellationToken, HttpMethod.Get, true, ClientIdForTracks);
         }
@@ -73,7 +73,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
 
         public async Task<UserResult> GetFollowings(int userId, CancellationToken cancellationToken, PagingInfo pagingInfo)
         {
-            var query = string.Format("/users/{0}/followings", userId);
+            var query = string.Format("/users/{UserId}/followings", userId);
 
             var result = await this.ExecutePaged<UserResult>(query, pagingInfo, cancellationToken);
             return result;
@@ -81,7 +81,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
 
         public async Task<UserResult> GetFollowers(int userId, CancellationToken cancellationToken, PagingInfo pagingInfo)
         {
-            var query = string.Format("/users/{0}/followers", userId);
+            var query = string.Format("/users/{UserId}/followers", userId);
 
             var result = await this.ExecutePaged<UserResult>(query, pagingInfo, cancellationToken);
             return result;
@@ -89,7 +89,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
 
         public async Task<TrackResult> GetUserTracks(int userId, CancellationToken cancellationToken, PagingInfo pagingInfo)
         {
-            var query = string.Format("/users/{0}/tracks", userId);
+            var query = string.Format("/users/{UserId}/tracks", userId);
 
             var result = await this.ExecutePaged<TrackResult>(query, pagingInfo, cancellationToken, ClientIdForTracks);
             return result;
@@ -107,7 +107,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
 
         public async Task<TrackResult> GetFavorites(int userId, CancellationToken cancellationToken, PagingInfo pagingInfo)
         {
-            var query = string.Format("/users/{0}/favorites", userId);
+            var query = string.Format("/users/{UserId}/favorites", userId);
 
             var result = await this.ExecutePaged<TrackResult>(query, pagingInfo, cancellationToken);
             return result;
@@ -115,7 +115,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
 
         public async Task<List<Playlist>> GetPlaylists(int userId, CancellationToken cancellationToken, PagingInfo pagingInfo)
         {
-            var query = string.Format("/users/{0}/playlists", userId);
+            var query = string.Format("/users/{UserId}/playlists", userId);
 
             ////var result = await this.ExecutePaged<PlaylistResult>(query, pagingInfo, cancellationToken);
             var result = await this.Execute<List<Playlist>>(query, cancellationToken);
@@ -126,7 +126,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
         {
             this.accessToken = null;
 
-            var query = string.Format("/oauth2/token?client_id={0}&client_secret={1}&grant_type=password&username={2}&password={3}", ClientId, ClientSecret, username, password);
+            var query = string.Format("/oauth2/token?client_id={ClientId}&client_secret={ClientSecret}&grant_type=password&username={Username}&password={Password}", ClientId, ClientSecret, username, password);
 
             var newToken = await this.Execute<AccessToken>(query, cancellationToken, HttpMethod.Post, false);
 
@@ -232,7 +232,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
                 return true;
             }
 
-            var query = string.Format("/oauth2/token?client_id={0}&client_secret={1}&grant_type=refresh_token&refresh_token={2}", ClientId, ClientSecret, this.accessToken.refresh_token);
+            var query = string.Format("/oauth2/token?client_id={ClientId}&client_secret={ClientSecret}&grant_type=refresh_token&refresh_token={RefreshToken}", ClientId, ClientSecret, this.accessToken.refresh_token);
 
             this.accessToken = null;
             var newToken = await this.Execute<AccessToken>(query, cancellationToken, HttpMethod.Post, false);

@@ -33,7 +33,7 @@ namespace MediaBrowser.Channels.LeagueOfLegends.Twitch
             {
                 return Helpers.PlaceholderId;
             }
-            return string.Format("{0}-{1}-{2}-{3}", IdString, Id, TimeStartString, TimeStart);
+            return string.Format("{IdString}-{Id}-{TimeStartString}-{TimeStart}", IdString, Id, TimeStartString, TimeStart);
         }
     }
 }

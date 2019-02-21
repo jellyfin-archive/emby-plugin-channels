@@ -249,7 +249,8 @@ namespace MediaBrowser.Channels.SvtPlay
             var items = new List<ChannelMediaInfo>();
             using (var streaminfo = await _httpClient.Get(new HttpRequestOptions
             {
-                Url = string.Format("http://www.svtplay.se{0}?output=json", id.ToLower()),
+                // TODO this URL must be a bug...? Depending on the id
+                Url = string.Format("http://www.svtplay.se{Id}?output=json", id.ToLower()),
                 CancellationToken = cancellationToken
             }))
             {

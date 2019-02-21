@@ -132,7 +132,7 @@ namespace MediaBrowser.Plugins.SoundCloud.Drawing
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "{{X={0}, Y={1}}}", new object[] { this.x, this.y });
+            return string.Format(CultureInfo.CurrentCulture, "{{X={X}, Y={Y}}}", new object[] { this.x, this.y });
         }
     }
 }

@@ -19,7 +19,7 @@ namespace MediaBrowser.Channels.LeagueOfLegends.Twitch
 
         public Task<Broadcast> GetBroadcast(string id, CancellationToken cancellationToken)
         {
-            string url = string.Format("/api/videos/a{0}", id);
+            string url = string.Format("/api/videos/a{Id}", id);
             return ExecuteRequest<Broadcast>(url, cancellationToken);
         }
 

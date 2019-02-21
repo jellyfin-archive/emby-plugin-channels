@@ -139,7 +139,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
                 if (unreservedChars.IndexOf(symbol) != -1)
                     result.Append(symbol);
                 else
-                    result.Append('%' + String.Format("{0:X2}", (int)symbol));
+                    result.Append('%' + string.Format("{Symbol:X2}", (int)symbol));
             }
 
             return result.ToString();
@@ -233,7 +233,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
 
             parameters.Sort(new QueryParameterComparer());
 
-            normalizedUrl = string.Format("{0}://{1}", url.Scheme, url.Host);
+            normalizedUrl = string.Format("{Scheme}://{Host}", url.Scheme, url.Host);
 
             if (!((url.Scheme == "http" && url.Port == 80) ||
                 (url.Scheme == "https" && url.Port == 443)))
@@ -315,7 +315,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
             {
                 case OAuthSignatureType.PLAINTEXT:
                     return WebUtility.UrlEncode(
-                        string.Format("{0}&{1}", consumerSecret, tokenSecret));
+                        string.Format("{Consumer}&{Token}", consumerSecret, tokenSecret));
                 case OAuthSignatureType.HMACSHA1:
                     var signatureBase = GenerateSignatureBase(url, consumerKey,
                         token, tokenSecret,
@@ -326,7 +326,7 @@ namespace MediaBrowser.Plugins.Vimeo.VimeoAPI.Common
                                        {
                                            Key = Encoding.UTF8.GetBytes(
                                            //Key = Encoding.ASCII.GetBytes(
-                                                string.Format("{0}&{1}",
+                                                string.Format("{Consumer}&{Token}",
                                                 UrlEncode(consumerSecret),
                                                 string.IsNullOrEmpty(tokenSecret)
                                                     ? ""
