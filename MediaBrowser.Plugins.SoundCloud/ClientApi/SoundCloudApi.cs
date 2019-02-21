@@ -15,7 +15,7 @@ namespace MediaBrowser.Plugins.SoundCloud.ClientApi
 {
     public class SoundCloudApi
     {
-        // TODO substitute API keys
+        // SoundCloud aren't handing out new API keys, so we are keeping these.
         public const string ClientId = "78fd88dde7ebf8fdcad08106f6d56ab6";
         public const string ClientSecret = "ef6b3dbe724eff1d03298c2e787a69bd";
         public const string BaseUrl = "https://api.soundcloud.com";
